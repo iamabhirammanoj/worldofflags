@@ -1,0 +1,3156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORLDOFFLAGS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            position: relative;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0); /* Slightly opaque background for better visibility */
+            padding: 1rem 2rem;
+            text-align: center;
+            z-index: 1000;
+            /*border-bottom: 2px solid #ffffff; /* Add a bottom border */
+            /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+        }
+
+        #searchInput {
+            width: 500px;
+            max-width: 80%;
+            padding: 15px;
+            border-radius: 30px;
+            border: 2px solid #fff;
+            background: #454767;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .countries-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            margin-top: 80px; /* Adjust this value to ensure space for the search bar */
+        }
+
+
+        .country-card {
+            background: #333648;
+            border-radius: 15px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .country-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .country-card:hover .flag-wrapper .flag-slice {
+            animation: wave 1s ease-in-out infinite alternate;
+        }
+
+        .country-card:hover .flag-wrapper {
+            transform: rotateY(0deg) skew(0deg);
+        }
+
+        .flag-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        @keyframes wave {
+            0% {
+                transform: rotateY(0deg) translateY(0) scaleY(1);
+            }
+            50% {
+                transform: rotateY(var(--rotate-max, 5deg)) translateY(-5px) scaleY(1.05);
+            }
+            100% {
+                transform: rotateY(0deg) translateY(0) scaleY(1);
+            }
+        }
+
+        .flag-slice {
+            transform-origin: left center; /* Pivot on left edge */
+            animation: wave 2s ease-in-out infinite;
+        }
+        /* Add the flag waving animation */
+    /* Add the flag waving animation */
+        @keyframes w {
+            to {
+                transform: translateZ(0.0001px) rotateY(-12deg); /* Adjust this value to your liking for waving */
+            }
+        }
+
+
+
+        .flag-wrapper {
+            position: relative;
+            width: 360px;
+            height: 180px;
+            /* Fix the left side as the pivot */
+            transform-origin: left center;
+            /* Set a perspective for a natural 3D effect */
+            perspective: 800px;
+            /* Start with no rotation */
+            transform: rotateY(0deg);
+            transform-style: preserve-3d;
+            background-size: cover;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+
+        /* Flag slices */
+
+        .flag-slice {
+            position: absolute;
+            width: 15px; /* Slice width */
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 360px 100%;
+            /* Set the transform origin on the left edge of each slice */
+            transform-origin: left center;
+            /* Ensure the slice is flat initially */
+            transform: rotateY(0deg);
+            z-index: 1;
+        }
+
+        /* Apply the updated animation for flag slices */
+        .flag-wrapper .flag-slice {
+            animation: wave 2s ease-in-out infinite alternate;
+            animation-delay: 0s;
+        }
+        .flag-wrapper:hover .flag-slice {
+            animation: w 2s ease-in-out infinite alternate;
+        }
+
+
+        /* Make each slice have its own animation delay */
+    /* Loop through flag slices and apply the wave animation */
+        .flag-wrapper .flag-slice {
+            animation: w 1s ease-in-out infinite alternate;
+        }
+
+        .flag-wrapper .flag-slice:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .flag-wrapper .flag-slice:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+        .flag-wrapper .flag-slice:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+        /* Repeat this for all slices as needed */
+        /* You can adjust animation delay to fine-tune the effect for each slice */
+
+        .flag-img {
+            width: 180px; /* Keep original size */
+            height: 110px; /* Keep original size */
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transform-origin: center;
+            animation: w 2s ease-in-out infinite alternate; /* Apply waving animation */
+        }
+
+            .flag-wrapper {
+            position: relative;
+            width: 360px; /* Keep the original flag width */
+            height: 180px; /* Keep the original flag height */
+            transform: rotateY(20deg) skew(5deg); /* Preserve initial skew and rotation */
+            transform-style: preserve-3d;
+            background-size: cover;
+            overflow: hidden;
+            background-image: url("https://flags.fmcdn.net/data/flags/w580/#{$flag}.png");
+            background-position: -200% -200%; /* Hide image initially */
+        }
+
+
+
+        /* Flag slices */
+        .flag-slice {
+            position: absolute;
+            width: 15px; /* Keep original slice width */
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 360px 100%; /* Flag size */
+            transform-origin: 0 0;
+            transform: translateZ(0.0001px) rotateY(0deg); /* Initial flat state */
+            background-image: inherit;
+        }
+
+                /* New more realistic wave animation */
+        @keyframes wave {
+            0% {
+                transform: rotateY(0deg) translateY(0) scaleY(1);
+            }
+            5% {
+                transform: rotateY(-1deg) translateY(-1px) scaleY(1.01);
+            }
+            10% {
+                transform: rotateY(-2deg) translateY(-2px) scaleY(1.02);
+            }
+            15% {
+                transform: rotateY(-3deg) translateY(-3px) scaleY(1.03);
+            }
+            20% {
+                transform: rotateY(-4deg) translateY(-4px) scaleY(1.04);
+            }
+            25% {
+                transform: rotateY(-5deg) translateY(-5px) scaleY(1.05);
+            }
+            30% {
+                transform: rotateY(-4deg) translateY(-4px) scaleY(1.04);
+            }
+            35% {
+                transform: rotateY(-3deg) translateY(-3px) scaleY(1.03);
+            }
+            40% {
+                transform: rotateY(-2deg) translateY(-2px) scaleY(1.02);
+            }
+            45% {
+                transform: rotateY(-1deg) translateY(-1px) scaleY(1.01);
+            }
+            50% {
+                transform: rotateY(0deg) translateY(0) scaleY(1);
+            }
+            55% {
+                transform: rotateY(1deg) translateY(1px) scaleY(1.01);
+            }
+            60% {
+                transform: rotateY(2deg) translateY(2px) scaleY(1.02);
+            }
+            65% {
+                transform: rotateY(3deg) translateY(3px) scaleY(1.03);
+            }
+            70% {
+                transform: rotateY(4deg) translateY(4px) scaleY(1.04);
+            }
+            75% {
+                transform: rotateY(5deg) translateY(5px) scaleY(1.05);
+            }
+            80% {
+                transform: rotateY(4deg) translateY(4px) scaleY(1.04);
+            }
+            85% {
+                transform: rotateY(3deg) translateY(3px) scaleY(1.03);
+            }
+            90% {
+                transform: rotateY(2deg) translateY(2px) scaleY(1.02);
+            }
+            95% {
+                transform: rotateY(1deg) translateY(1px) scaleY(1.01);
+            }
+            100% {
+                transform: rotateY(0deg) translateY(0) scaleY(1);
+            }
+        }
+
+
+
+        .country-name {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            word-wrap: break-word;
+            flex-grow: 1;
+        }
+
+        .flag-details {
+            color: #ddd;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .section-heading {
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            border-bottom: 2px solid white;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .arrow-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border-top: 3px solid white;
+            border-right: 3px solid white;
+            transform: rotate(45deg);
+            margin-top: 10px;
+        }
+
+        footer {
+            background: #454767;
+            color: white;
+            text-align: center;
+            padding: 2.5rem;
+            text-transform: uppercase;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="SEARCH COUNTRIES...">
+    </div>
+
+    <div class="countries-container" id="countriesContainer"></div>
+    
+    <footer>
+        © 2023 WORLDOFFLAGS - ALL RIGHTS RESERVED  
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #bbb; line-height: 1.5;">
+            Due to confusion in geopolitical conditions, some places are shown in both the countries and other regions and territories sections. Please note.
+        </p>
+    </footer>
+    
+
+    <script>
+       window.onload = function () {
+            const flagWrappers = document.querySelectorAll('.flag-wrapper');
+            const sliceCount = 24;
+            
+            flagWrappers.forEach(flagWrapper => {
+                for (let i = 0; i < sliceCount; i++) {
+                    const slice = document.createElement('div');
+                    slice.classList.add('flag-slice');
+                    slice.style.left = `${i * 15}px`;
+                    slice.style.backgroundPositionX = `-${i * 15}px`;
+                    slice.style.animationDelay = `${i * 0.08}s`;
+                    flagWrapper.appendChild(slice);
+                }
+            });
+        };
+
+        async function fetchCountries() {
+            try {
+                const response = await fetch('https://restcountries.com/v3.1/all');
+                const allEntries = await response.json();
+                
+                // Add Kosovo, Taiwan, and Aruba manually
+                const additionalCountries = [
+                    {
+                        name: { common: 'Kosovo' },
+                        flags: { png: 'https://upload.wikimedia.org/wikipedia/commons/1/1f/Flag_of_Kosovo.svg' },
+                        independent: true,
+                        status: 'officially-assigned'
+                    },
+                    {
+                        name: { common: 'Taiwan' },
+                        flags: { png: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_the_Republic_of_China.svg' },
+                        independent: true,
+                        status: 'officially-assigned'
+                    },
+                    {
+                        name: { common: 'Aruba' },
+                        flags: { png: 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Aruba.svg' },
+                        independent: true,
+                        status: 'officially-assigned'
+                    }
+                ];
+
+                // Include sovereign countries and manually added entries
+                const sovereignCountries = [
+                    ...allEntries.filter(entry => entry.independent && entry.status === 'officially-assigned'),
+                    ...additionalCountries
+                ].sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                const otherRegions = allEntries.filter(entry =>
+                    !entry.independent || entry.status !== 'officially-assigned'
+                ).sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                displayCountries(sovereignCountries, otherRegions);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function displayCountries(countries, regions) {
+            const container = document.getElementById('countriesContainer');
+            
+            // Display sovereign countries
+            countries.forEach(country => {
+                createCountryCard(container, country);
+            });
+
+            // Create and add the separation heading
+            const heading = document.createElement('h2');
+            heading.className = 'section-heading';
+            heading.textContent = 'Other Regions and Territories'; // Adjust the text if needed
+            heading.style.textAlign = 'center'; // Ensure the heading is centered
+            heading.style.fontSize = '2rem'; // Increase the font size for visibility
+            heading.style.margin = '3rem 0'; // Add margin to space out the sections
+
+            // Add the arrow mark
+            const arrow = document.createElement('span');
+            arrow.className = 'arrow-icon'; // Assign a class for styling
+            heading.appendChild(arrow);
+
+            container.appendChild(heading);
+
+            // Display other regions
+            regions.forEach(region => {
+                createCountryCard(container, region);
+            });
+        }
+
+        function createCountryCard(container, entry) {
+            const card = document.createElement('div');
+            card.className = 'country-card';
+
+            const flagInfo = getFlagDetails(entry);
+
+            card.innerHTML = `
+                <div class="flag-header">
+                    <img src="${entry.flags.png}" alt="${entry.name.common} Flag" class="flag-img">
+                    <h2 class="country-name">${entry.name.common}</h2>
+                </div>
+                <div class="flag-details">
+                    <strong>Adopted:</strong> ${flagInfo.adopted} <br>
+                    <strong>Designer:</strong> ${flagInfo.designer} <br><br>
+                    ${flagInfo.description}
+                </div>
+            `;
+
+            card.querySelector('.flag-img').addEventListener('click', () => {
+                window.open(`https://www.google.com/search?q=${entry.name.common} flag`, '_blank');
+            });
+
+            // Add click event to redirect to Wikipedia page
+            card.querySelector('.flag-details').addEventListener('click', () => {
+                window.open(`https://en.wikipedia.org/wiki/Flag_of_${entry.name.common.replace(/ /g, '_')}`, '_blank');
+            });
+                // Add click event to redirect to Google search results for the country name
+            card.querySelector('.country-name').addEventListener('click', () => {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(entry.name.common)}`, '_blank');
+            });
+            
+            // Add click event for the designer search if the designer is not "Unknown"
+            if (flagInfo.designer !== "Unknown") {
+                const designerElement = card.querySelector('.flag-details').querySelector('strong:nth-of-type(2)');
+                designerElement.addEventListener('click', () => {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(flagInfo.designer)}`, '_blank');
+                });
+            }
+            container.appendChild(card);
+        }
+
+        function getFlagDetails(entry) {
+            const details = {
+                adopted: "Data not available",
+                designer: "Unknown",
+                description: "No detailed symbolism available."
+            };
+
+            switch (entry.name.common) {
+                case 'Afghanistan':
+                details.adopted = "August 19, 2013";
+                details.designer = "Unknown";
+                details.description = `
+                    <ul>
+                        <li>The flag consists of three vertical stripes: black, red, and green.</li>
+                        <li>Black: Represents the past and hardships faced by the nation.</li>
+                        <li>Red: Symbolizes the bloodshed and struggle for independence.</li>
+                        <li>Green: Represents hope, prosperity, and Islam.</li>
+                        <li>The emblem in the center includes a mosque, two flags, and the Shahada (Islamic creed).</li>
+                    </ul>
+                `;
+                break;
+
+                case 'Albania':
+    details.adopted = "April 7, 1992";
+    details.designer = "Derived from the flag of the League of Lezhë (1444)";
+    details.description = `
+        <ul>
+            <li>Features a black two-headed eagle on a red background.</li>
+            <li>Red: Symbolizes bravery, strength, and valor.</li>
+            <li>Two-headed eagle: Represents the sovereignty of Albania and its people.</li>
+            <li>Design originates from the medieval Albanian national hero, Skanderbeg.</li>
+        </ul>
+    `;
+    break;
+
+case 'Algeria':
+    details.adopted = "July 3, 1962";
+    details.designer = "Messali Hadj (credited as inspiration)";
+    details.description = `
+        <ul>
+            <li>The flag consists of two vertical stripes, green and white, with a red star and crescent.</li>
+            <li>Green: Represents Islam and nature.</li>
+            <li>White: Symbolizes purity and peace.</li>
+            <li>Red star & crescent: Signify the struggle for independence and the faith of the Algerian people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Andorra':
+    details.adopted = "July 27, 1866";
+    details.designer = "Inspired by the flags of France and Spain";
+    details.description = `
+        <ul>
+            <li>The flag has three vertical stripes: blue, yellow, and red, with the Andorran coat of arms in the center.</li>
+            <li>Blue & Red: Represent France.</li>
+            <li>Yellow & Red: Represent Spain.</li>
+            <li>Coat of arms: Displays the historical influences of France and Spain over Andorra.</li>
+        </ul>
+    `;
+    break;
+
+case 'Angola':
+    details.adopted = "November 11, 1975";
+    details.designer = "Henrique Onambwé";
+    details.description = `
+        <ul>
+            <li>Features a red and black horizontal bicolor with a yellow emblem of a half gear wheel, a machete, and a star.</li>
+            <li>Red: Represents the bloodshed during independence struggles.</li>
+            <li>Black: Symbolizes the African continent.</li>
+            <li>Gear & Machete: Represent industry and peasantry.</li>
+            <li>Star: Symbolizes progress and socialism.</li>
+        </ul>
+    `;
+    break;
+
+case 'Antigua and Barbuda':
+    details.adopted = "February 27, 1967";
+    details.designer = "Sir Reginald Samuel";
+    details.description = `
+        <ul>
+            <li>The flag consists of a red field with a black, blue, and white design and a golden sun.</li>
+            <li>Black: Represents African heritage.</li>
+            <li>Blue: Symbolizes hope.</li>
+            <li>White: Represents purity.</li>
+            <li>Sun: Stands for the dawn of a new era for the nation.</li>
+            <li>Red: Symbolizes the people’s energy and dynamism.</li>
+        </ul>
+    `;
+    break;
+
+case 'Argentina':
+    details.adopted = "July 20, 1816 (current version: February 25, 1818)";
+    details.designer = "Manuel Belgrano";
+    details.description = `
+        <ul>
+            <li>Features three horizontal stripes: light blue, white, and light blue, with a golden sun in the center.</li>
+            <li>Blue & White: Represent the sky and clouds of Argentina.</li>
+            <li>Sun of May: Symbolizes freedom and independence, inspired by Incan mythology.</li>
+        </ul>
+    `;
+    break;
+
+case 'Armenia':
+    details.adopted = "August 24, 1990";
+    details.designer = "National Assembly of Armenia";
+    details.description = `
+        <ul>
+            <li>The flag consists of three horizontal stripes: red, blue, and orange.</li>
+            <li>Red: Represents the bloodshed for independence.</li>
+            <li>Blue: Symbolizes Armenia’s skies.</li>
+            <li>Orange: Represents the courage and talent of the Armenian people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Australia':
+    details.adopted = "September 3, 1901 (finalized in 1954)";
+    details.designer = "Five co-winners of a design competition";
+    details.description = `
+        <ul>
+            <li>Features a blue field with the Union Jack, the Commonwealth Star, and the Southern Cross constellation.</li>
+            <li>Union Jack: Represents Australia's history as a British colony.</li>
+            <li>Commonwealth Star: Symbolizes the six states and territories.</li>
+            <li>Southern Cross: Represents Australia's geographic position.</li>
+        </ul>
+    `;
+    break;
+
+case 'Austria':
+    details.adopted = "May 1, 1945";
+    details.designer = "Attributed to Duke Leopold V of Austria (12th century)";
+    details.description = `
+        <ul>
+            <li>A simple red-white-red horizontal tricolor.</li>
+            <li>Red & White: Derived from the legend of Duke Leopold V, whose white tunic was stained with blood in battle.</li>
+        </ul>
+    `;
+    break;
+
+case 'Azerbaijan':
+    details.adopted = "February 5, 1991";
+    details.designer = "Ali bey Huseynzade";
+    details.description = `
+        <ul>
+            <li>The flag consists of three horizontal stripes: blue, red, and green, with a white crescent and an eight-pointed star.</li>
+            <li>Blue: Represents Turkic heritage.</li>
+            <li>Red: Symbolizes modernization and progress.</li>
+            <li>Green: Represents Islam.</li>
+            <li>Crescent & Star: Symbolize the Islamic faith, with the star's eight points referring to the eight branches of Turkic peoples.</li>
+        </ul>
+    `;
+    break;
+
+case 'Bahamas':
+    details.adopted = "July 10, 1973";
+    details.designer = "Dr. Hervis Bain";
+    details.description = `
+        <ul>
+            <li>The flag consists of three horizontal stripes: aquamarine, yellow, and aquamarine, with a black triangle.</li>
+            <li>Black Triangle: Represents the strength and will of the Bahamian people.</li>
+            <li>Aquamarine: Symbolizes the surrounding sea.</li>
+            <li>Yellow: Represents the golden beaches.</li>
+        </ul>
+    `;
+    break;
+
+case 'Bahrain':
+    details.adopted = "February 14, 2002";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A red flag with a white serrated band featuring five points.</li>
+            <li>Red: Traditional color of the Khawarij sect of Islam.</li>
+            <li>White: Symbolizes peace.</li>
+            <li>Five Points: Represent the five pillars of Islam.</li>
+        </ul>
+    `;
+    break;
+
+case 'Bangladesh':
+    details.adopted = "January 17, 1972";
+    details.designer = "Quamrul Hassan";
+    details.description = `
+        <ul>
+            <li>A dark green field with a red circle slightly off-center.</li>
+            <li>Green: Represents the lush landscapes and Islamic heritage.</li>
+            <li>Red Circle: Symbolizes the blood of those who fought for independence and the rising sun of a new nation.</li>
+        </ul>
+    `;
+    break;
+
+case 'Barbados':
+    details.adopted = "November 30, 1966";
+    details.designer = "Grantley Prescod";
+    details.description = `
+        <ul>
+            <li>The flag consists of three vertical stripes: blue, yellow, and blue, with a black trident head in the center.</li>
+            <li>Blue: Represents the sea and sky.</li>
+            <li>Yellow: Symbolizes the golden sands of Barbados.</li>
+            <li>Black Trident: Represents independence from colonial rule, with the three prongs symbolizing government for, by, and of the people.</li>
+        </ul>
+    `;
+    break;
+    case 'Belarus':
+    details.adopted = "June 7, 1995";
+    details.designer = "Mikhail Husyev";
+    details.description = `
+        <ul>
+            <li>A red and green horizontal bicolor with a white-red traditional pattern on the hoist.</li>
+            <li>Red: Represents past struggles and sacrifices.</li>
+            <li>Green: Symbolizes the forests and agricultural wealth of Belarus.</li>
+            <li>Ornamental Pattern: Reflects traditional Belarusian folk culture.</li>
+        </ul>
+    `;
+    break;
+
+case 'Belgium':
+    details.adopted = "January 23, 1831";
+    details.designer = "Based on the colors of the Duchy of Brabant";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of black, yellow, and red.</li>
+            <li>Black: Represents the shield of Brabant.</li>
+            <li>Yellow: Symbolizes the lion on the shield.</li>
+            <li>Red: Represents the lion's claws and tongue, as well as the struggle for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Belize':
+    details.adopted = "September 21, 1981";
+    details.designer = "Inspired by the colonial flag with added national symbols";
+    details.description = `
+        <ul>
+            <li>A blue field with red stripes and a large circular coat of arms in the center.</li>
+            <li>Blue & Red: Represent the country's political parties.</li>
+            <li>Coat of Arms: Includes a shield with a ship (for trade), tools (for industry), and a forest background (for natural resources).</li>
+            <li>Wreath: Contains 50 leaves, marking 1950 as the start of Belize’s independence movement.</li>
+        </ul>
+    `;
+    break;
+
+case 'Benin':
+    details.adopted = "August 1, 1960 (Re-adopted in 1990)";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A green vertical stripe with yellow and red horizontal stripes.</li>
+            <li>Green: Symbolizes hope and revival.</li>
+            <li>Yellow: Represents wealth.</li>
+            <li>Red: Stands for courage.</li>
+        </ul>
+    `;
+    break;
+
+case 'Bhutan':
+    details.adopted = "1969";
+    details.designer = "Based on traditional Bhutanese symbolism";
+    details.description = `
+        <ul>
+            <li>A diagonally divided yellow-orange flag with a white dragon holding jewels.</li>
+            <li>Yellow: Represents the secular authority of the king.</li>
+            <li>Orange: Symbolizes Buddhism.</li>
+            <li>White Dragon (Druk): Represents purity and the name "Land of the Thunder Dragon."</li>
+            <li>Jewels: Symbolize the nation's wealth and security.</li>
+        </ul>
+    `;
+    break;
+
+case 'Bolivia':
+    details.adopted = "November 30, 1851";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, yellow, and green with the national coat of arms at the center.</li>
+            <li>Red: Symbolizes the bravery of those who fought for independence.</li>
+            <li>Yellow: Represents the nation’s mineral wealth.</li>
+            <li>Green: Stands for the fertility of the land.</li>
+        </ul>
+    `;
+    break;
+
+case 'Bosnia and Herzegovina':
+    details.adopted = "February 4, 1998";
+    details.designer = "Carlos Westendorp";
+    details.description = `
+        <ul>
+            <li>A blue field with a yellow triangle and a line of white stars.</li>
+            <li>Yellow Triangle: Represents the shape of Bosnia and Herzegovina and its three constituent peoples (Bosniaks, Croats, and Serbs).</li>
+            <li>Blue Background: Symbolizes European integration.</li>
+            <li>White Stars: Represent infinity and the country's aspirations for peace.</li>
+        </ul>
+    `;
+    break;
+
+case 'Botswana':
+    details.adopted = "September 30, 1966";
+    details.designer = "Botswana National Flag Committee";
+    details.description = `
+        <ul>
+            <li>A light blue field with black and white stripes in the center.</li>
+            <li>Blue: Represents water and life.</li>
+            <li>Black & White Stripes: Symbolize racial harmony and diversity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Brazil':
+    details.adopted = "November 15, 1889";
+    details.designer = "Raimundo Teixeira Mendes & Miguel Lemos";
+    details.description = `
+        <ul>
+            <li>A green field with a yellow diamond and a blue globe featuring 27 stars and the national motto.</li>
+            <li>Green: Represents Brazil's lush forests.</li>
+            <li>Yellow: Symbolizes the wealth of natural resources.</li>
+            <li>Blue Globe & Stars: Depict the night sky over Rio de Janeiro on November 15, 1889.</li>
+            <li>Motto "Ordem e Progresso": Means "Order and Progress."</li>
+        </ul>
+    `;
+    break;
+
+case 'Brunei':
+    details.adopted = "September 29, 1959";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A yellow field with black and white diagonal stripes and the national emblem at the center.</li>
+            <li>Yellow: Traditional color of Brunei’s monarchy.</li>
+            <li>Black & White Stripes: Represent the country’s chief ministers.</li>
+            <li>Emblem: Features a parasol (symbolizing monarchy), wings (justice), hands (generosity), and a crescent (Islam).</li>
+        </ul>
+    `;
+    break;
+    case 'Bulgaria':
+    details.adopted = "April 16, 1879 (Re-adopted 1991)";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of white, green, and red.</li>
+            <li>White: Represents peace and freedom.</li>
+            <li>Green: Symbolizes agriculture and fertility.</li>
+            <li>Red: Stands for the courage and bloodshed of Bulgarian soldiers.</li>
+        </ul>
+    `;
+    break;
+
+case 'Burkina Faso':
+    details.adopted = "August 4, 1984";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of red and green with a yellow star in the center.</li>
+            <li>Red: Represents the revolutionary struggle.</li>
+            <li>Green: Symbolizes the agricultural wealth of the country.</li>
+            <li>Yellow Star: Stands for the guiding light of the revolution.</li>
+        </ul>
+    `;
+    break;
+
+case 'Burundi':
+    details.adopted = "June 28, 1967";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A white diagonal cross dividing red and green sections with a white disk and three red stars.</li>
+            <li>Red: Symbolizes the struggle for independence.</li>
+            <li>Green: Represents hope and future progress.</li>
+            <li>White Cross: Signifies peace.</li>
+            <li>Three Stars: Represent the country's motto: Unity, Work, and Progress.</li>
+        </ul>
+    `;
+    break;
+
+case 'Cabo Verde':
+    details.adopted = "September 22, 1992";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A blue field with a horizontal white and red stripe and ten yellow stars in a circle.</li>
+            <li>Blue: Represents the Atlantic Ocean.</li>
+            <li>White & Red Stripes: Symbolize peace and the nation's hard work.</li>
+            <li>Ten Yellow Stars: Represent the ten islands of Cabo Verde.</li>
+        </ul>
+    `;
+    break;
+
+case 'Cambodia':
+    details.adopted = "June 30, 1993";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A red field with blue borders and a white depiction of Angkor Wat.</li>
+            <li>Blue: Represents the monarchy.</li>
+            <li>Red: Symbolizes the courage of the people.</li>
+            <li>White Angkor Wat: Represents the nation's cultural heritage and Buddhist faith.</li>
+        </ul>
+    `;
+    break;
+
+case 'Cameroon':
+    details.adopted = "May 20, 1975";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of green, red, and yellow with a central yellow star.</li>
+            <li>Green: Represents the forests of southern Cameroon.</li>
+            <li>Red: Symbolizes unity.</li>
+            <li>Yellow: Represents the sun and the savannas in the north.</li>
+            <li>Yellow Star: Known as the "star of unity."</li>
+        </ul>
+    `;
+    break;
+
+case 'Canada':
+    details.adopted = "February 15, 1965";
+    details.designer = "George F. G. Stanley & John Matheson";
+    details.description = `
+        <ul>
+            <li>A red field with a white square containing a red maple leaf.</li>
+            <li>Red: Represents the sacrifice of Canadian soldiers.</li>
+            <li>White: Symbolizes peace and honesty.</li>
+            <li>Maple Leaf: Represents nature and the cultural heritage of Canada.</li>
+        </ul>
+    `;
+    break;
+
+case 'Central African Republic':
+    details.adopted = "December 1, 1958";
+    details.designer = "Barthélemy Boganda";
+    details.description = `
+        <ul>
+            <li>Four horizontal stripes of blue, white, green, and yellow with a vertical red stripe and a yellow star.</li>
+            <li>Blue: Represents liberty.</li>
+            <li>White: Symbolizes purity.</li>
+            <li>Green: Represents hope and faith.</li>
+            <li>Yellow: Stands for tolerance.</li>
+            <li>Red Vertical Stripe: Symbolizes bloodshed for independence.</li>
+            <li>Yellow Star: Represents unity and a bright future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Chad':
+    details.adopted = "November 6, 1959";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of blue, yellow, and red.</li>
+            <li>Blue: Represents the sky, hope, and agriculture.</li>
+            <li>Yellow: Symbolizes the desert and sun.</li>
+            <li>Red: Stands for progress, unity, and sacrifice.</li>
+        </ul>
+    `;
+    break;
+
+case 'Chile':
+    details.adopted = "October 18, 1817";
+    details.designer = "Ignacio Zenteno";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of white and red with a blue square containing a white star.</li>
+            <li>White: Represents the snow of the Andes Mountains.</li>
+            <li>Red: Symbolizes the blood shed for independence.</li>
+            <li>Blue: Represents the sky and the Pacific Ocean.</li>
+            <li>White Star: Signifies guidance and progress.</li>
+        </ul>
+    `;
+    break;
+    case 'China':
+    details.adopted = "October 1, 1949";
+    details.designer = "Zeng Liansong";
+    details.description = `
+        <ul>
+            <li>A red field with five yellow stars in the upper hoist corner.</li>
+            <li>Red: Represents communism and revolution.</li>
+            <li>Large Yellow Star: Symbolizes the Communist Party.</li>
+            <li>Four Smaller Stars: Represent the four social classes united under communism.</li>
+        </ul>
+    `;
+    break;
+
+case 'Colombia':
+    details.adopted = "November 26, 1861";
+    details.designer = "Francisco de Miranda";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of yellow, blue, and red.</li>
+            <li>Yellow: Represents wealth, sovereignty, and justice.</li>
+            <li>Blue: Symbolizes the seas and skies.</li>
+            <li>Red: Represents the blood spilled for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Comoros':
+    details.adopted = "January 7, 2002";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>Four horizontal stripes of yellow, white, red, and blue with a green triangle containing a crescent and four stars.</li>
+            <li>Yellow, White, Red, Blue: Represent the four main islands.</li>
+            <li>Green Triangle: Represents Islam.</li>
+            <li>Crescent and Four Stars: Symbolize Islam and the four islands.</li>
+        </ul>
+    `;
+    break;
+
+case 'Congo (Democratic Republic)':
+    details.adopted = "February 20, 2006";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A sky blue field with a red diagonal stripe bordered by yellow and a yellow star in the upper hoist corner.</li>
+            <li>Blue: Represents peace.</li>
+            <li>Red Stripe: Symbolizes the blood shed for independence.</li>
+            <li>Yellow Borders: Represent prosperity.</li>
+            <li>Yellow Star: Stands for a bright future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Congo (Republic)':
+    details.adopted = "August 18, 1959";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A diagonal tricolor of green, yellow, and red.</li>
+            <li>Green: Represents agriculture and forests.</li>
+            <li>Yellow: Symbolizes friendship and nobility.</li>
+            <li>Red: Stands for the struggle for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Costa Rica':
+    details.adopted = "November 27, 1906 (current form)";
+    details.designer = "Pacífica Fernández Oreamuno";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, white, and red with the national coat of arms.</li>
+            <li>Blue: Represents the sky, opportunities, and perseverance.</li>
+            <li>White: Symbolizes peace, wisdom, and happiness.</li>
+            <li>Red: Stands for the blood shed for freedom and the warmth of the people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Croatia':
+    details.adopted = "December 21, 1990";
+    details.designer = "Miroslav Šutej (coat of arms)";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and blue with the Croatian coat of arms.</li>
+            <li>Red, White, and Blue: Traditional Pan-Slavic colors.</li>
+            <li>Coat of Arms: Features a checkerboard pattern and five historical shields representing Croatian regions.</li>
+        </ul>
+    `;
+    break;
+
+case 'Cuba':
+    details.adopted = "May 20, 1902";
+    details.designer = "Narciso López";
+    details.description = `
+        <ul>
+            <li>Five horizontal stripes of blue and white with a red triangle and a white star.</li>
+            <li>Blue Stripes: Represent the three original provinces.</li>
+            <li>White Stripes: Symbolize purity and strength.</li>
+            <li>Red Triangle: Stands for the bloodshed in the fight for independence.</li>
+            <li>White Star: Represents independence and freedom.</li>
+        </ul>
+    `;
+    break;
+
+case 'Cyprus':
+    details.adopted = "August 16, 1960";
+    details.designer = "İsmet Güney";
+    details.description = `
+        <ul>
+            <li>A white field with an orange map of Cyprus above two olive branches.</li>
+            <li>Orange: Represents the island’s rich copper resources.</li>
+            <li>Olive Branches: Symbolize peace between Greek and Turkish Cypriots.</li>
+        </ul>
+    `;
+    break;
+
+case 'Czech Republic':
+    details.adopted = "March 30, 1920 (as part of Czechoslovakia), reaffirmed in 1993";
+    details.designer = "Jaroslav Kursa";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of white and red with a blue triangle.</li>
+            <li>White: Represents peace and honesty.</li>
+            <li>Red: Symbolizes courage and valor.</li>
+            <li>Blue Triangle: Stands for vigilance, truth, and loyalty.</li>
+        </ul>
+    `;
+    break;
+    case 'Denmark':
+    details.adopted = "June 15, 1219 (oldest national flag)";
+    details.designer = "Legend attributes it to a divine sign in battle";
+    details.description = `
+        <ul>
+            <li>A red field with a white Nordic cross.</li>
+            <li>White Cross: Represents Christianity.</li>
+            <li>Red Background: Symbolizes strength and bravery.</li>
+        </ul>
+    `;
+    break;
+
+case 'Djibouti':
+    details.adopted = "June 27, 1977";
+    details.designer = "Musa Aden";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of light blue and green with a white triangle containing a red star.</li>
+            <li>Blue: Represents the sea and sky.</li>
+            <li>Green: Symbolizes the land and prosperity.</li>
+            <li>White Triangle: Stands for peace.</li>
+            <li>Red Star: Represents unity and independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Dominica':
+    details.adopted = "November 3, 1978";
+    details.designer = "Alwin Bully";
+    details.description = `
+        <ul>
+            <li>A green field with a cross of yellow, black, and white and a red disc featuring a Sisserou parrot.</li>
+            <li>Green: Represents lush vegetation.</li>
+            <li>Cross Colors: Symbolize Christianity, African heritage, and the native Carib people.</li>
+            <li>Red Disc: Stands for social justice.</li>
+            <li>Sisserou Parrot: Represents national pride and biodiversity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Dominican Republic':
+    details.adopted = "November 6, 1844";
+    details.designer = "Juan Pablo Duarte";
+    details.description = `
+        <ul>
+            <li>A divided flag of blue, red, and white with a central coat of arms.</li>
+            <li>Blue: Represents liberty.</li>
+            <li>Red: Symbolizes the blood of independence fighters.</li>
+            <li>White Cross: Stands for salvation and faith.</li>
+            <li>Coat of Arms: Features the Bible, a cross, and a banner reading "Dios, Patria, Libertad" (God, Fatherland, Liberty).</li>
+        </ul>
+    `;
+    break;
+
+case 'Ecuador':
+    details.adopted = "September 26, 1860";
+    details.designer = "Inspired by Francisco de Miranda's design";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of yellow, blue, and red with a national coat of arms.</li>
+            <li>Yellow: Represents the country's wealth and fertile lands.</li>
+            <li>Blue: Symbolizes the sky and ocean.</li>
+            <li>Red: Stands for the blood of those who fought for independence.</li>
+            <li>Coat of Arms: Features the Andean condor, symbolizing protection and power.</li>
+        </ul>
+    `;
+    break;
+
+case 'Egypt':
+    details.adopted = "October 4, 1984";
+    details.designer = "Derived from the Arab Liberation Flag";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and black with the Eagle of Saladin at the center.</li>
+            <li>Red: Represents the struggle against oppression.</li>
+            <li>White: Symbolizes a bright future and peace.</li>
+            <li>Black: Stands for overcoming colonialism.</li>
+            <li>Eagle of Saladin: Represents strength and sovereignty.</li>
+        </ul>
+    `;
+    break;
+
+case 'El Salvador':
+    details.adopted = "May 27, 1912";
+    details.designer = "Inspired by the United Provinces of Central America flag";
+    details.description = `
+        <ul>
+            <li>A horizontal triband of blue and white with the national coat of arms.</li>
+            <li>Blue: Represents the sky and the Pacific Ocean.</li>
+            <li>White: Symbolizes peace and unity.</li>
+            <li>Coat of Arms: Features a triangle with five volcanoes, a Phrygian cap, and a rainbow symbolizing liberty.</li>
+        </ul>
+    `;
+    break;
+
+case 'Equatorial Guinea':
+    details.adopted = "August 21, 1979";
+    details.designer = "Original flag restored after a dictatorship";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, white, and red with a blue triangle and a coat of arms.</li>
+            <li>Green: Represents the country’s natural resources.</li>
+            <li>White: Symbolizes peace.</li>
+            <li>Red: Stands for independence and the fight for freedom.</li>
+            <li>Blue Triangle: Represents the sea linking the mainland to the islands.</li>
+            <li>Coat of Arms: Features a silk-cotton tree and the motto "Unidad, Paz, Justicia" (Unity, Peace, Justice).</li>
+        </ul>
+    `;
+    break;
+
+case 'Eritrea':
+    details.adopted = "December 5, 1995";
+    details.designer = "Based on the flag of the Eritrean People's Liberation Front";
+    details.description = `
+        <ul>
+            <li>A red triangle with green and blue sections, featuring a gold olive wreath.</li>
+            <li>Red: Represents the bloodshed in the war for independence.</li>
+            <li>Green: Symbolizes agriculture and prosperity.</li>
+            <li>Blue: Stands for the ocean.</li>
+            <li>Olive Wreath: Represents peace and unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Estonia':
+    details.adopted = "August 7, 1990";
+    details.designer = "Adopted from a 19th-century student movement flag";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, black, and white.</li>
+            <li>Blue: Represents the sky and loyalty.</li>
+            <li>Black: Symbolizes the hardships of the past.</li>
+            <li>White: Stands for purity and the striving for freedom.</li>
+        </ul>
+    `;
+    break;
+    case 'Eswatini':
+    details.adopted = "October 6, 1968";
+    details.designer = "Unknown";
+    details.description = `
+        <ul>
+            <li>A horizontal triband of blue, red, and blue with yellow borders and a central shield and spear design.</li>
+            <li>Blue: Represents peace and stability.</li>
+            <li>Red: Symbolizes past battles.</li>
+            <li>Yellow: Stands for natural resources.</li>
+            <li>Shield and Spear: Represent protection and Swazi heritage.</li>
+        </ul>
+    `;
+    break;
+
+case 'Ethiopia':
+    details.adopted = "October 31, 1996";
+    details.designer = "Derived from traditional Ethiopian colors";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, yellow, and red with a blue disc and yellow star.</li>
+            <li>Green: Represents fertility and hope.</li>
+            <li>Yellow: Symbolizes peace and harmony.</li>
+            <li>Red: Stands for strength and sacrifice.</li>
+            <li>Blue Disc & Yellow Star: Represent unity and a bright future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Fiji':
+    details.adopted = "October 10, 1970";
+    details.designer = "Inspired by the British colonial ensign";
+    details.description = `
+        <ul>
+            <li>A light blue field with the Union Jack and the shield of Fiji.</li>
+            <li>Blue: Represents the Pacific Ocean.</li>
+            <li>Union Jack: Symbolizes historical ties with the United Kingdom.</li>
+            <li>Shield: Features a cross, sugarcane, bananas, a dove, and a coconut palm, representing agriculture and peace.</li>
+        </ul>
+    `;
+    break;
+
+case 'Finland':
+    details.adopted = "May 29, 1918";
+    details.designer = "Eero Snellman and Bruno Tuukkanen";
+    details.description = `
+        <ul>
+            <li>A white field with a blue Nordic cross.</li>
+            <li>White: Represents snow-covered landscapes.</li>
+            <li>Blue: Symbolizes the lakes and sky of Finland.</li>
+        </ul>
+    `;
+    break;
+
+case 'France':
+    details.adopted = "February 15, 1794";
+    details.designer = "Based on the French Revolution ideals";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of blue, white, and red.</li>
+            <li>Blue: Represents liberty.</li>
+            <li>White: Symbolizes equality.</li>
+            <li>Red: Stands for fraternity and the blood of revolutionaries.</li>
+        </ul>
+    `;
+    break;
+
+case 'Gabon':
+    details.adopted = "August 9, 1960";
+    details.designer = "Inspired by the country's geography";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, yellow, and blue.</li>
+            <li>Green: Represents the forests.</li>
+            <li>Yellow: Symbolizes the equator and the sun.</li>
+            <li>Blue: Stands for the Atlantic Ocean.</li>
+        </ul>
+    `;
+    break;
+
+case 'Gambia':
+    details.adopted = "February 18, 1965";
+    details.designer = "Louis Thomasi";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, blue, and green with white borders.</li>
+            <li>Red: Represents the savanna and sun.</li>
+            <li>Blue: Symbolizes the Gambia River.</li>
+            <li>Green: Stands for the forests and agriculture.</li>
+            <li>White Borders: Represent unity and peace.</li>
+        </ul>
+    `;
+    break;
+
+case 'Georgia':
+    details.adopted = "January 14, 2004";
+    details.designer = "Based on the medieval flag of Georgia";
+    details.description = `
+        <ul>
+            <li>A white field with five red crosses.</li>
+            <li>White: Represents peace and purity.</li>
+            <li>Red Crosses: Symbolize Christianity and Georgia's national identity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Germany':
+    details.adopted = "May 23, 1949 (West Germany, later reunified)";
+    details.designer = "Derived from the flag of the Weimar Republic";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of black, red, and gold.</li>
+            <li>Black: Represents determination.</li>
+            <li>Red: Symbolizes bravery and strength.</li>
+            <li>Gold: Stands for prosperity and generosity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Ghana':
+    details.adopted = "March 6, 1957";
+    details.designer = "Theodosia Okoh";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, yellow, and green with a black five-pointed star.</li>
+            <li>Red: Represents the blood of those who fought for independence.</li>
+            <li>Yellow: Symbolizes the country's mineral wealth.</li>
+            <li>Green: Stands for the lush vegetation and agriculture.</li>
+            <li>Black Star: Represents African freedom and unity.</li>
+        </ul>
+    `;
+    break;
+    case 'Greece':
+    details.adopted = "December 22, 1978";
+    details.designer = "Derived from historical naval flags";
+    details.description = `
+        <ul>
+            <li>A blue field with nine white stripes and a white cross in the upper hoist corner.</li>
+            <li>Blue & White: Represent the sea, sky, and purity.</li>
+            <li>White Cross: Symbolizes Greek Orthodoxy.</li>
+            <li>Nine Stripes: Represent the nine syllables of the phrase "Freedom or Death."</li>
+        </ul>
+    `;
+    break;
+
+case 'Grenada':
+    details.adopted = "February 7, 1974";
+    details.designer = "Anthony C. George";
+    details.description = `
+        <ul>
+            <li>A red border with a yellow field divided by a green cross and featuring a nutmeg symbol and six stars.</li>
+            <li>Red: Represents courage and vitality.</li>
+            <li>Yellow: Symbolizes wisdom and sunshine.</li>
+            <li>Green: Stands for agriculture and fertility.</li>
+            <li>Nutmeg: Represents Grenada's role as a leading nutmeg producer.</li>
+            <li>Six Stars: Symbolize the country's administrative divisions.</li>
+        </ul>
+    `;
+    break;
+
+case 'Guatemala':
+    details.adopted = "August 17, 1871";
+    details.designer = "Derived from the United Provinces of Central America flag";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of blue and white with the national coat of arms.</li>
+            <li>Blue: Represents the sky and the Atlantic and Pacific Oceans.</li>
+            <li>White: Symbolizes peace and purity.</li>
+            <li>Coat of Arms: Features a quetzal bird, scroll, crossed rifles, and laurel branches, symbolizing liberty and defense.</li>
+        </ul>
+    `;
+    break;
+
+case 'Guinea':
+    details.adopted = "November 10, 1958";
+    details.designer = "Inspired by the Pan-African movement";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of red, yellow, and green.</li>
+            <li>Red: Represents the struggle for independence.</li>
+            <li>Yellow: Symbolizes the country's mineral wealth and sunshine.</li>
+            <li>Green: Stands for agriculture and the forests.</li>
+        </ul>
+    `;
+    break;
+
+case 'Guinea-Bissau':
+    details.adopted = "September 24, 1973";
+    details.designer = "Inspired by the Pan-African colors";
+    details.description = `
+        <ul>
+            <li>A vertical red stripe and horizontal yellow and green stripes with a black star.</li>
+            <li>Red: Represents the struggle for independence.</li>
+            <li>Yellow: Symbolizes the country's wealth and natural resources.</li>
+            <li>Green: Represents the forests and hope for the future.</li>
+            <li>Black Star: Stands for African unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Guyana':
+    details.adopted = "May 26, 1966";
+    details.designer = "Whitney Smith";
+    details.description = `
+        <ul>
+            <li>A green field with a red triangle bordered by black and a yellow triangle bordered by white.</li>
+            <li>Green: Represents the forests and agriculture.</li>
+            <li>Red Triangle: Symbolizes zeal and dynamism.</li>
+            <li>Black Border: Stands for endurance.</li>
+            <li>Yellow Triangle: Represents mineral wealth.</li>
+            <li>White Border: Symbolizes peace.</li>
+        </ul>
+    `;
+    break;
+
+case 'Haiti':
+    details.adopted = "February 26, 1986";
+    details.designer = "Derived from the revolutionary flag of 1804";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of blue and red with the national coat of arms in a white panel.</li>
+            <li>Blue: Represents the African heritage of the people.</li>
+            <li>Red: Symbolizes the European heritage.</li>
+            <li>Coat of Arms: Features cannons, a palm tree, and the motto "L'Union Fait la Force" (Unity Makes Strength).</li>
+        </ul>
+    `;
+    break;
+
+case 'Honduras':
+    details.adopted = "January 9, 1866";
+    details.designer = "Derived from the United Provinces of Central America flag";
+    details.description = `
+        <ul>
+            <li>A horizontal triband of blue and white with five blue stars.</li>
+            <li>Blue: Represents the Pacific Ocean and Caribbean Sea.</li>
+            <li>White: Symbolizes peace and prosperity.</li>
+            <li>Five Stars: Represent the five original member states of the United Provinces of Central America.</li>
+        </ul>
+    `;
+    break;
+
+case 'Hungary':
+    details.adopted = "October 12, 1957";
+    details.designer = "Derived from historical Hungarian banners";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and green.</li>
+            <li>Red: Represents strength and the blood shed for independence.</li>
+            <li>White: Symbolizes faithfulness and freedom.</li>
+            <li>Green: Stands for hope and the nation's agricultural wealth.</li>
+        </ul>
+    `;
+    break;
+
+case 'Iceland':
+    details.adopted = "June 19, 1915 (official in 1944)";
+    details.designer = "Matthías Þórðarson";
+    details.description = `
+        <ul>
+            <li>A blue field with a white-edged red Nordic cross.</li>
+            <li>Blue: Represents the Atlantic Ocean.</li>
+            <li>White: Symbolizes the glaciers and snow-covered landscapes.</li>
+            <li>Red: Stands for volcanic activity.</li>
+        </ul>
+    `;
+    break;
+    case 'India':
+    details.adopted = "August 15, 1947";
+    details.designer = "Pingali Venkayya";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of saffron, white, and green with a navy blue wheel (Ashoka Chakra) in the center.</li>
+            <li>Saffron: Represents courage and sacrifice.</li>
+            <li>White: Symbolizes peace and truth.</li>
+            <li>Green: Stands for fertility, growth, and auspiciousness.</li>
+            <li>Ashoka Chakra: Represents the eternal wheel of law.</li>
+        </ul>
+    `;
+    break;
+
+case 'Indonesia':
+    details.adopted = "August 17, 1945";
+    details.designer = "Derived from historical flag of the Kingdom of Majapahit";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of red and white.</li>
+            <li>Red: Represents courage and the human body.</li>
+            <li>White: Symbolizes purity and the human soul.</li>
+        </ul>
+    `;
+    break;
+
+case 'Iran':
+    details.adopted = "July 29, 1980";
+    details.designer = "Houshang Seyhoun";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, white, and red with the national emblem in the center.</li>
+            <li>Green: Represents Islam and growth.</li>
+            <li>White: Symbolizes peace and honesty.</li>
+            <li>Red: Represents courage and valor.</li>
+            <li>National Emblem: Depicts a stylized representation of the word "Allah".</li>
+        </ul>
+    `;
+    break;
+
+case 'Iraq':
+    details.adopted = "January 13, 2008";
+    details.designer = "Saddam Hussein era design, modified after 2003";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and black with the Arabic inscription "Allahu Akbar" in green.</li>
+            <li>Red: Represents the struggle for independence and liberation.</li>
+            <li>White: Symbolizes peace and a bright future.</li>
+            <li>Black: Stands for the oppression faced by the country.</li>
+            <li>Arabic Inscription: Means "God is Great".</li>
+        </ul>
+    `;
+    break;
+
+case 'Ireland':
+    details.adopted = "January 1, 1919";
+    details.designer = "Geraldine Plunkett";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of green, white, and orange.</li>
+            <li>Green: Represents Irish Catholics and nationalists.</li>
+            <li>White: Symbolizes peace between the Catholics and Protestants.</li>
+            <li>Orange: Represents the Protestant minority in Ireland.</li>
+        </ul>
+    `;
+    break;
+
+case 'Israel':
+    details.adopted = "October 28, 1948";
+    details.designer = "Simon Ginzburg and Asher Callah";
+    details.description = `
+        <ul>
+            <li>A white field with two blue horizontal stripes and the Star of David in the center.</li>
+            <li>Blue: Represents the Jewish heritage and the Jewish prayer shawl (tallit).</li>
+            <li>White: Symbolizes peace and purity.</li>
+            <li>Star of David: Represents Jewish identity and unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Italy':
+    details.adopted = "June 18, 1946";
+    details.designer = "Giuseppe Mazzini";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of green, white, and red.</li>
+            <li>Green: Represents the country's plains and hills.</li>
+            <li>White: Symbolizes the snow-capped Alps.</li>
+            <li>Red: Stands for the bloodshed in Italy's unification.</li>
+        </ul>
+    `;
+    break;
+
+case 'Jamaica':
+    details.adopted = "August 6, 1962";
+    details.designer = "The Government of Jamaica";
+    details.description = `
+        <ul>
+            <li>A diagonal cross in gold, dividing the flag into four triangles: green (top left and bottom right) and black (top right and bottom left).</li>
+            <li>Gold: Represents the natural resources and the wealth of the country.</li>
+            <li>Green: Symbolizes the land and hope for the future.</li>
+            <li>Black: Stands for the strength and resilience of the Jamaican people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Japan':
+    details.adopted = "August 5, 1854";
+    details.designer = "N/A";
+    details.description = `
+        <ul>
+            <li>A white field with a red circular disc in the center.</li>
+            <li>White: Symbolizes purity and honesty.</li>
+            <li>Red: Represents the sun and the country’s name ("Japan" meaning "Land of the Rising Sun").</li>
+        </ul>
+    `;
+    break;
+
+case 'Jordan':
+    details.adopted = "April 18, 1928";
+    details.designer = "Fahreddine Ali Bey";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of black, white, and green with a red triangle and a white star.</li>
+            <li>Black: Represents the black flag of the Arab Revolt.</li>
+            <li>White: Symbolizes the Umayyad Caliphate.</li>
+            <li>Green: Represents the Fatimid Caliphate.</li>
+            <li>Red Triangle: Represents the Hashemite dynasty.</li>
+            <li>White Star: Stands for the unity of Arab nations.</li>
+        </ul>
+    `;
+    break;
+    case 'Kazakhstan':
+    details.adopted = "December 16, 1991";
+    details.designer = "Shaken Niyazbekov";
+    details.description = `
+        <ul>
+            <li>A light blue field with a golden sun and a flying eagle.</li>
+            <li>Blue: Represents the sky and water, as well as the cultural unity of the people.</li>
+            <li>Golden Sun: Symbolizes life, energy, and the new dawn of the country.</li>
+            <li>Flying Eagle: Represents freedom and independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Kenya':
+    details.adopted = "December 12, 1963";
+    details.designer = "Michael M. K. Tetu";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of black, red, and green with a white-bordered red and black shield in the center.</li>
+            <li>Black: Represents the people of Kenya.</li>
+            <li>Red: Symbolizes the sacrifices made for independence.</li>
+            <li>Green: Represents the land and agriculture.</li>
+            <li>White: Stands for peace and unity.</li>
+            <li>Shield: Represents the defense of the nation.</li>
+        </ul>
+    `;
+    break;
+
+case 'Kiribati':
+    details.adopted = "July 12, 1979";
+    details.designer = "The Government of Kiribati";
+    details.description = `
+        <ul>
+            <li>A red field with a golden frigatebird flying over a blue and white ocean wave.</li>
+            <li>Red: Represents the people of Kiribati.</li>
+            <li>Gold: Symbolizes the richness and resources of the islands.</li>
+            <li>Frigatebird: Represents the spirit of freedom and independence.</li>
+            <li>Ocean Waves: Represent the islands and the Pacific Ocean.</li>
+        </ul>
+    `;
+    break;
+
+case 'Kuwait':
+    details.adopted = "September 7, 1961";
+    details.designer = "The Government of Kuwait";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, white, and red with a black trapezoid on the hoist side.</li>
+            <li>Green: Represents fertility, the country's prosperity, and agriculture.</li>
+            <li>White: Symbolizes peace and purity.</li>
+            <li>Red: Represents the struggle for independence.</li>
+            <li>Black: Stands for the defeat of the enemy.</li>
+        </ul>
+    `;
+    break;
+
+case 'Kyrgyzstan':
+    details.adopted = "March 3, 1992";
+    details.designer = "D. M. Orozbekov";
+    details.description = `
+        <ul>
+            <li>A red field with a yellow sun and a stylized yurt in the center.</li>
+            <li>Red: Represents the people and the past struggles of the nation.</li>
+            <li>Yellow Sun: Symbolizes the nation's bright future and wealth.</li>
+            <li>Yurt: Represents the traditional nomadic culture of the Kyrgyz people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Laos':
+    details.adopted = "December 2, 1975";
+    details.designer = "N/A";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, blue, and red with a white circle in the center.</li>
+            <li>Red: Represents the bloodshed for the independence of Laos.</li>
+            <li>Blue: Symbolizes the country's wealth and resources.</li>
+            <li>White Circle: Represents the full moon over the Mekong River, symbolizing peace and unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Latvia':
+    details.adopted = "November 7, 1918";
+    details.designer = "The Government of Latvia";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of deep red and white.</li>
+            <li>Red: Represents the courage, sacrifice, and the strength of the Latvian people.</li>
+            <li>White: Symbolizes peace, truth, and the unity of the Latvian people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Lebanon':
+    details.adopted = "December 7, 1943";
+    details.designer = "N/A";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and red with a green cedar tree in the center.</li>
+            <li>Red: Represents the sacrifices of the Lebanese people.</li>
+            <li>White: Symbolizes peace, purity, and snow-covered mountains.</li>
+            <li>Cedar Tree: Represents the historical and national symbol of Lebanon, and its resilience.</li>
+        </ul>
+    `;
+    break;
+
+case 'Lesotho':
+    details.adopted = "October 4, 1966";
+    details.designer = "The Government of Lesotho";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, white, and green with a black shield and a spear in the center.</li>
+            <li>Blue: Represents the sky and the country's commitment to peace.</li>
+            <li>White: Symbolizes purity and peace.</li>
+            <li>Green: Represents the country's agriculture and land.</li>
+            <li>Black Shield: Represents the protection and defense of the nation.</li>
+            <li>Spear: Symbolizes defense and strength.</li>
+        </ul>
+    `;
+    break;
+
+case 'Liberia':
+    details.adopted = "August 24, 1847";
+    details.designer = "The Government of Liberia";
+    details.description = `
+        <ul>
+            <li>A horizontal striped field with eleven red and white stripes and a blue square in the canton with a white star.</li>
+            <li>Red: Represents the courage and sacrifices of the people.</li>
+            <li>White: Symbolizes purity and the country’s desire for peace.</li>
+            <li>Blue Square: Represents the country's loyalty to liberty.</li>
+            <li>White Star: Symbolizes the freedom and independence of Liberia.</li>
+        </ul>
+    `;
+    break;
+    case 'Liechtenstein':
+    details.adopted = "June 15, 1937";
+    details.designer = "The Government of Liechtenstein";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of blue and red with a gold crown in the upper hoist corner.</li>
+            <li>Blue: Represents the sky and the unity of the people.</li>
+            <li>Red: Symbolizes the country's courage and valor.</li>
+            <li>Crown: Represents the monarchy and the sovereignty of the country.</li>
+        </ul>
+    `;
+    break;
+
+case 'Lithuania':
+    details.adopted = "March 20, 1989";
+    details.designer = "Vincas Kudirka";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of yellow, green, and red.</li>
+            <li>Yellow: Represents the country's wealth and the sun.</li>
+            <li>Green: Symbolizes the land, freedom, and hope.</li>
+            <li>Red: Stands for the courage and sacrifice of the people for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Luxembourg':
+    details.adopted = "June 23, 1972";
+    details.designer = "The Government of Luxembourg";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and light blue.</li>
+            <li>Red: Represents the courage and valor of the people.</li>
+            <li>White: Symbolizes peace and unity.</li>
+            <li>Light Blue: Represents the sky and the country's commitment to liberty.</li>
+        </ul>
+    `;
+    break;
+
+case 'Madagascar':
+    details.adopted = "October 14, 1958";
+    details.designer = "The Government of Madagascar";
+    details.description = `
+        <ul>
+            <li>A vertical bicolor of red and green with a white vertical stripe at the hoist.</li>
+            <li>Red: Represents the sovereignty and struggle for independence.</li>
+            <li>Green: Symbolizes the fertile land and agriculture.</li>
+            <li>White Stripe: Stands for the peace and unity of the nation.</li>
+        </ul>
+    `;
+    break;
+
+case 'Malawi':
+    details.adopted = "May 24, 1964";
+    details.designer = "The Government of Malawi";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of black, red, and green with a rising sun in the center.</li>
+            <li>Black: Represents the people of Malawi.</li>
+            <li>Red: Symbolizes the sacrifices for independence.</li>
+            <li>Green: Represents the country's land and resources.</li>
+            <li>Rising Sun: Represents a new dawn of freedom and progress.</li>
+        </ul>
+    `;
+    break;
+
+case 'Malaysia':
+    details.adopted = "September 16, 1963";
+    details.designer = "Mohamad bin Hamzah";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of red and white with a blue canton containing a yellow crescent and 14-pointed star.</li>
+            <li>Red: Represents courage and strength.</li>
+            <li>White: Symbolizes purity and unity.</li>
+            <li>Blue Canton: Represents the unity of the people and the country.</li>
+            <li>Crescent: Symbolizes Islam, the country's religion.</li>
+            <li>14-Pointed Star: Represents the 13 member states and the federal government.</li>
+        </ul>
+    `;
+    break;
+
+case 'Malta':
+    details.adopted = "September 21, 1964";
+    details.designer = "The Government of Malta";
+    details.description = `
+        <ul>
+            <li>A vertical bicolor of white and red with a George Cross in the upper hoist corner.</li>
+            <li>White: Symbolizes peace and justice.</li>
+            <li>Red: Represents the courage and sacrifice of the people.</li>
+            <li>George Cross: Represents the bravery of the Maltese people during WWII.</li>
+        </ul>
+    `;
+    break;
+
+case 'Marshall Islands':
+    details.adopted = "May 1, 1979";
+    details.designer = "The Government of the Marshall Islands";
+    details.description = `
+        <ul>
+            <li>A blue field with two diagonal stripes of orange and white, with a white star in the top hoist corner.</li>
+            <li>Blue: Represents the Pacific Ocean surrounding the islands.</li>
+            <li>Orange Stripes: Symbolize the people and their commitment to progress.</li>
+            <li>White Star: Represents the country's 24 municipalities.</li>
+        </ul>
+    `;
+    break;
+
+case 'Mauritania':
+    details.adopted = "November 28, 2017";
+    details.designer = "The Government of Mauritania";
+    details.description = `
+        <ul>
+            <li>A green field with a golden crescent and star in the center.</li>
+            <li>Green: Represents Islam, the dominant religion in the country.</li>
+            <li>Golden Crescent: Symbolizes the Islamic faith.</li>
+            <li>Star: Represents the unity of the Mauritanian people and the country’s progress.</li>
+        </ul>
+    `;
+    break;
+
+case 'Mauritius':
+    details.adopted = "March 12, 1968";
+    details.designer = "The Government of Mauritius";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, blue, yellow, and green.</li>
+            <li>Red: Represents the struggle for independence and the people of Mauritius.</li>
+            <li>Blue: Symbolizes the Indian Ocean and the country's commitment to unity.</li>
+            <li>Yellow: Represents the country's wealth and its bright future.</li>
+            <li>Green: Stands for the country's agriculture and natural resources.</li>
+        </ul>
+    `;
+    break;
+    case 'Mexico':
+    details.adopted = "September 16, 1968";
+    details.designer = "The Government of Mexico";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of green, white, and red with the national coat of arms in the center of the white band.</li>
+            <li>Green: Represents independence and hope.</li>
+            <li>White: Symbolizes purity and the peace between the country's people.</li>
+            <li>Red: Stands for the blood of national heroes who fought for independence.</li>
+            <li>Coat of Arms: Features an eagle perched on a cactus with a snake in its beak, symbolizing Aztec heritage.</li>
+        </ul>
+    `;
+    break;
+
+case 'Micronesia':
+    details.adopted = "November 3, 1978";
+    details.designer = "The Government of Micronesia";
+    details.description = `
+        <ul>
+            <li>A blue field with four white stars arranged in a diamond pattern.</li>
+            <li>Blue: Represents the Pacific Ocean surrounding the islands.</li>
+            <li>Four Stars: Represent the four states of Micronesia: Yap, Chuuk, Pohnpei, and Kosrae.</li>
+        </ul>
+    `;
+    break;
+
+case 'Moldova':
+    details.adopted = "November 27, 1990";
+    details.designer = "The Government of Moldova";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of blue, yellow, and red with the national coat of arms in the center of the yellow band.</li>
+            <li>Blue: Represents the sky and the country's freedom.</li>
+            <li>Yellow: Symbolizes the country's agriculture and its fields of wheat.</li>
+            <li>Red: Stands for the blood of those who fought for the country’s independence.</li>
+            <li>Coat of Arms: Features an eagle holding a cross, a scepter, and an olive branch, symbolizing strength and unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Monaco':
+    details.adopted = "April 4, 1881";
+    details.designer = "The House of Grimaldi";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of red and white.</li>
+            <li>Red: Represents the ruling Grimaldi family of Monaco.</li>
+            <li>White: Symbolizes the people and the royal family’s commitment to their welfare.</li>
+        </ul>
+    `;
+    break;
+
+case 'Mongolia':
+    details.adopted = "February 12, 1992";
+    details.designer = "The Government of Mongolia";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of red, blue, and red with the Soyombo symbol in the upper hoist corner.</li>
+            <li>Red: Represents progress and the country's future.</li>
+            <li>Blue: Symbolizes the eternal sky and the unity of the Mongolian people.</li>
+            <li>Soyombo Symbol: A representation of the country's independence, strength, and national pride.</li>
+        </ul>
+    `;
+    break;
+
+case 'Montenegro':
+    details.adopted = "July 13, 2004";
+    details.designer = "The Government of Montenegro";
+    details.description = `
+        <ul>
+            <li>A red field with a golden border and the national coat of arms in the center.</li>
+            <li>Red: Represents the blood of heroes and the struggle for independence.</li>
+            <li>Gold: Symbolizes the country's wealth and sovereignty.</li>
+            <li>Coat of Arms: Features a two-headed eagle and a lion, symbolizing strength and royal heritage.</li>
+        </ul>
+    `;
+    break;
+
+case 'Morocco':
+    details.adopted = "November 17, 1956";
+    details.designer = "The Government of Morocco";
+    details.description = `
+        <ul>
+            <li>A red field with a green pentagram (five-pointed star) in the center.</li>
+            <li>Red: Represents the bravery and the sacrifices made by the people for independence.</li>
+            <li>Green: Symbolizes Islam and the country's commitment to faith.</li>
+            <li>Pentagram: Represents the seal of Solomon and the unity of the country.</li>
+        </ul>
+    `;
+    break;
+
+case 'Mozambique':
+    details.adopted = "May 1, 1983";
+    details.designer = "The Government of Mozambique";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, black, and yellow with a red triangle at the hoist containing a white star, an AK-47 rifle, and a hoe.</li>
+            <li>Green: Represents the country’s agriculture and natural resources.</li>
+            <li>Black: Symbolizes the African continent.</li>
+            <li>Yellow: Represents the country's wealth and its resources.</li>
+            <li>Red Triangle: Represents the struggle for independence.</li>
+            <li>AK-47 and Hoe: Symbolize the country’s defense and commitment to farming.</li>
+        </ul>
+    `;
+    break;
+
+case 'Namibia':
+    details.adopted = "March 21, 1990";
+    details.designer = "The Government of Namibia";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of blue and red with a diagonal green stripe and a golden sun in the upper hoist corner.</li>
+            <li>Blue: Represents the sky, the Atlantic Ocean, and the country's water resources.</li>
+            <li>Red: Symbolizes the people's struggle for freedom and independence.</li>
+            <li>Green: Represents the land, agriculture, and the country's wealth.</li>
+            <li>Golden Sun: Represents life and energy, as well as hope for the future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Nauru':
+    details.adopted = "January 31, 1968";
+    details.designer = "The Government of Nauru";
+    details.description = `
+        <ul>
+            <li>A blue field with a white star and a yellow horizontal stripe.</li>
+            <li>Blue: Represents the Pacific Ocean.</li>
+            <li>White Star: Represents the country's 12 districts.</li>
+            <li>Yellow Stripe: Symbolizes the country’s phosphate mining industry and wealth.</li>
+        </ul>
+    `;
+    break;
+    case 'Nepal':
+    details.adopted = "December 16, 1962";
+    details.designer = "The Government of Nepal";
+    details.description = `
+        <ul>
+            <li>A red field with two stacked triangles and a blue border.</li>
+            <li>Red: Represents the bravery of the people and the color of the rhododendron, the national flower.</li>
+            <li>Blue: Symbolizes peace and harmony.</li>
+            <li>Triangles: Represent the Himalayas and the two major religions, Hinduism and Buddhism.</li>
+        </ul>
+    `;
+    break;
+
+case 'Netherlands':
+    details.adopted = "February 19, 1937";
+    details.designer = "The Government of the Netherlands";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and blue.</li>
+            <li>Red: Represents the people's courage and struggle for independence.</li>
+            <li>White: Symbolizes peace and unity.</li>
+            <li>Blue: Represents the sea and the loyalty of the people.</li>
+        </ul>
+    `;
+    break;
+
+case 'New Zealand':
+    details.adopted = "March 24, 1902";
+    details.designer = "The Government of New Zealand";
+    details.description = `
+        <ul>
+            <li>A blue field with the Union Jack in the upper hoist corner and four red stars on the right.</li>
+            <li>Blue: Represents the Pacific Ocean and the country's vast natural resources.</li>
+            <li>Union Jack: Reflects New Zealand's historical ties to the United Kingdom.</li>
+            <li>Four Stars: Represent the Southern Cross constellation, which is visible in the southern hemisphere.</li>
+        </ul>
+    `;
+    break;
+
+case 'Nicaragua':
+    details.adopted = "July 4, 1971";
+    details.designer = "The Government of Nicaragua";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, white, and blue with the national coat of arms in the center of the white band.</li>
+            <li>Blue: Represents the Pacific Ocean and the Caribbean Sea.</li>
+            <li>White: Symbolizes peace and purity.</li>
+            <li>Coat of Arms: Features two volcanoes, a lake, and a rainbow, symbolizing the country’s natural beauty and peace.</li>
+        </ul>
+    `;
+    break;
+
+case 'Niger':
+    details.adopted = "December 18, 1959";
+    details.designer = "The Government of Niger";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of orange, white, and green with an orange circle in the center of the white band.</li>
+            <li>Orange: Represents the Sahara Desert and the country's resources.</li>
+            <li>White: Symbolizes peace and harmony.</li>
+            <li>Green: Stands for agriculture and the hope for a prosperous future.</li>
+            <li>Orange Circle: Represents the sun and the unity of the people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Nigeria':
+    details.adopted = "October 1, 1960";
+    details.designer = "The Government of Nigeria";
+    details.description = `
+        <ul>
+            <li>A vertical bicolor of green and white.</li>
+            <li>Green: Represents the country’s agricultural wealth.</li>
+            <li>White: Symbolizes peace and unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'North Korea':
+    details.adopted = "September 8, 1948";
+    details.designer = "The Government of North Korea";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, blue, and white with a white circle and a red star in the upper hoist corner.</li>
+            <li>Red: Represents the revolutionary spirit and the blood of those who fought for independence.</li>
+            <li>Blue: Symbolizes peace and the people’s loyalty to the state.</li>
+            <li>White Circle: Represents the unity of the Korean people.</li>
+            <li>Red Star: Represents the leadership of the Workers' Party of Korea.</li>
+        </ul>
+    `;
+    break;
+
+case 'Norway':
+    details.adopted = "July 17, 1821";
+    details.designer = "Fredrik Meltzer";
+    details.description = `
+        <ul>
+            <li>A red field with a blue cross outlined in white.</li>
+            <li>Red: Represents the country's struggles for independence.</li>
+            <li>Blue: Symbolizes loyalty and truth.</li>
+            <li>White: Represents peace and justice.</li>
+        </ul>
+    `;
+    break;
+
+case 'Oman':
+    details.adopted = "October 25, 1995";
+    details.designer = "The Government of Oman";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of white, red, and green with a red vertical stripe at the hoist and the national emblem in the top corner of the red stripe.</li>
+            <li>White: Represents peace and stability.</li>
+            <li>Red: Symbolizes the struggle for independence and the sacrifices made by the people.</li>
+            <li>Green: Represents the country's fertility and agricultural resources.</li>
+            <li>Emblem: Features a khanjar dagger, representing the security and heritage of the country.</li>
+        </ul>
+    `;
+    break;
+    case 'Pakistan':
+    details.adopted = "August 11, 1947";
+    details.designer = "Ameer-ud-Din Khidwai";
+    details.description = `
+        <ul>
+            <li>A green field with a white crescent moon and a five-pointed star.</li>
+            <li>Green: Represents the Muslim majority and Islam.</li>
+            <li>White: Symbolizes the religious minorities in Pakistan.</li>
+            <li>Crescent: Represents progress.</li>
+            <li>Star: Symbolizes light and knowledge.</li>
+        </ul>
+    `;
+    break;
+
+case 'Palau':
+    details.adopted = "January 1, 1981";
+    details.designer = "The Government of Palau";
+    details.description = `
+        <ul>
+            <li>A blue field with a yellow circle shifted to the hoist side.</li>
+            <li>Blue: Represents the Pacific Ocean surrounding the islands.</li>
+            <li>Yellow Circle: Symbolizes the full moon, which is important in the culture of Palau.</li>
+        </ul>
+    `;
+    break;
+
+case 'Panama':
+    details.adopted = "November 3, 1903";
+    details.designer = "The Government of Panama";
+    details.description = `
+        <ul>
+            <li>A white field with two blue stars in the upper corners and a red star in the bottom left corner.</li>
+            <li>Blue: Represents the Conservative Party.</li>
+            <li>Red: Symbolizes the Liberal Party.</li>
+            <li>Stars: Represent the provinces of Panama and the country's destiny as a bridge of the Americas.</li>
+        </ul>
+    `;
+    break;
+
+case 'Papua New Guinea':
+    details.adopted = "July 1, 1971";
+    details.designer = "The Government of Papua New Guinea";
+    details.description = `
+        <ul>
+            <li>A diagonal bicolor of red and black with a yellow star and bird of paradise symbol.</li>
+            <li>Red: Represents the country's natural resources and struggle for independence.</li>
+            <li>Black: Symbolizes the people of Papua New Guinea.</li>
+            <li>Yellow Star: Represents the Southern Cross constellation, a significant symbol for the people.</li>
+            <li>Bird of Paradise: Symbolizes the uniqueness and beauty of the country.</li>
+        </ul>
+    `;
+    break;
+
+case 'Paraguay':
+    details.adopted = "November 25, 1842";
+    details.designer = "The Government of Paraguay";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and blue with the national coat of arms on the top and bottom bands.</li>
+            <li>Red: Represents the blood shed for independence.</li>
+            <li>White: Symbolizes peace and justice.</li>
+            <li>Blue: Stands for liberty and freedom.</li>
+            <li>Coat of Arms: Features a lion and a palm tree, symbolizing the country's strength and independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Peru':
+    details.adopted = "February 25, 1825";
+    details.designer = "The Government of Peru";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of red, white, and red with the national coat of arms in the center of the white band.</li>
+            <li>Red: Represents the blood shed for independence.</li>
+            <li>White: Symbolizes peace and purity.</li>
+            <li>Coat of Arms: Features a vicuña, a tree, and a gold mine, representing the country's natural wealth and resources.</li>
+        </ul>
+    `;
+    break;
+
+case 'Philippines':
+    details.adopted = "July 4, 1946";
+    details.designer = "Emilio Aguinaldo";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of blue and red with a white triangle and three stars.</li>
+            <li>Blue: Represents peace and justice.</li>
+            <li>Red: Symbolizes bravery and the willingness to fight for independence.</li>
+            <li>White Triangle: Represents equality and the country's struggle for freedom.</li>
+            <li>Three Stars: Represent the three main islands of the Philippines—Luzon, Visayas, and Mindanao.</li>
+        </ul>
+    `;
+    break;
+
+case 'Poland':
+    details.adopted = "August 7, 1990";
+    details.designer = "The Government of Poland";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of white and red.</li>
+            <li>White: Represents peace and the people's desire for freedom.</li>
+            <li>Red: Symbolizes the blood shed for independence and the country’s struggles throughout history.</li>
+        </ul>
+    `;
+    break;
+
+case 'Portugal':
+    details.adopted = "June 30, 1911";
+    details.designer = "The Government of Portugal";
+    details.description = `
+        <ul>
+            <li>A vertical bicolor of green and red with the national coat of arms on the dividing line.</li>
+            <li>Green: Represents hope and the military.</li>
+            <li>Red: Symbolizes the revolution of 1910 and the people’s strength and unity.</li>
+            <li>Coat of Arms: Features a shield, five smaller shields, and a crown, symbolizing the country's history, heritage, and independence.</li>
+        </ul>
+    `;
+    break;
+    case 'Qatar':
+    details.adopted = "September 9, 1971";
+    details.designer = "The Government of Qatar";
+    details.description = `
+        <ul>
+            <li>A maroon field with a white serrated band on the hoist side.</li>
+            <li>Maroon: Represents the blood shed for the country’s independence.</li>
+            <li>White: Symbolizes peace and the country’s desire for stability.</li>
+            <li>Serrated Band: Represents Qatar's historical and cultural ties with the Arabian Peninsula.</li>
+        </ul>
+    `;
+    break;
+
+case 'Romania':
+    details.adopted = "December 27, 1989";
+    details.designer = "The Government of Romania";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of blue, yellow, and red.</li>
+            <li>Blue: Represents the country's loyalty and the sky over Romania.</li>
+            <li>Yellow: Symbolizes the country's prosperity and the nation's wealth.</li>
+            <li>Red: Represents the blood shed for the country's independence and unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Russia':
+    details.adopted = "August 22, 1991";
+    details.designer = "The Government of Russia";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of white, blue, and red.</li>
+            <li>White: Represents nobility and openness.</li>
+            <li>Blue: Symbolizes loyalty, honesty, and faithfulness.</li>
+            <li>Red: Represents courage, strength, and the struggles of the Russian people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Rwanda':
+    details.adopted = "October 25, 2001";
+    details.designer = "The Government of Rwanda";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, yellow, and green with a sun in the top right corner.</li>
+            <li>Blue: Represents peace and happiness.</li>
+            <li>Yellow: Symbolizes economic development.</li>
+            <li>Green: Stands for the country's rich agricultural resources.</li>
+            <li>Sun: Represents unity and the future of Rwanda.</li>
+        </ul>
+    `;
+    break;
+
+case 'Saint Kitts and Nevis':
+    details.adopted = "September 19, 1983";
+    details.designer = "The Government of Saint Kitts and Nevis";
+    details.description = `
+        <ul>
+            <li>A diagonal bicolor of green and yellow with two black stars.</li>
+            <li>Green: Represents the fertile land and the country's agricultural heritage.</li>
+            <li>Yellow: Symbolizes the country's rich natural resources.</li>
+            <li>Black Stars: Represent the two islands, Saint Kitts and Nevis, and the unity of the people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Saint Lucia':
+    details.adopted = "February 22, 1967";
+    details.designer = "The Government of Saint Lucia";
+    details.description = `
+        <ul>
+            <li>A blue field with a yellow triangle and two white isosceles triangles.</li>
+            <li>Blue: Represents the Caribbean Sea and the surrounding ocean.</li>
+            <li>Yellow Triangle: Symbolizes the island's sunny climate and golden beaches.</li>
+            <li>White Triangles: Represent peace and harmony.</li>
+        </ul>
+    `;
+    break;
+
+case 'Saint Vincent and the Grenadines':
+    details.adopted = "October 12, 1979";
+    details.designer = "The Government of Saint Vincent and the Grenadines";
+    details.description = `
+        <ul>
+            <li>A diagonal tricolor of blue, yellow, and green with three green diamonds in the center.</li>
+            <li>Blue: Represents the sky and the sea.</li>
+            <li>Yellow: Symbolizes the country's sunny climate and agricultural wealth.</li>
+            <li>Green: Represents the country’s lush vegetation and agricultural abundance.</li>
+            <li>Three Diamonds: Represent the three islands of Saint Vincent, Bequia, and Union Island.</li>
+        </ul>
+    `;
+    break;
+
+case 'Samoa':
+    details.adopted = "January 1, 1962";
+    details.designer = "The Government of Samoa";
+    details.description = `
+        <ul>
+            <li>A red field with a blue rectangle in the upper hoist corner containing five white stars.</li>
+            <li>Red: Represents courage and determination.</li>
+            <li>Blue: Symbolizes the Pacific Ocean and the country’s connection to it.</li>
+            <li>Five Stars: Represent the five islands of Samoa.</li>
+        </ul>
+    `;
+    break;
+
+case 'San Marino':
+    details.adopted = "April 6, 1862";
+    details.designer = "The Government of San Marino";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of white and blue with the national coat of arms in the center.</li>
+            <li>White: Represents peace and harmony.</li>
+            <li>Blue: Symbolizes the sky and the freedom of the republic.</li>
+            <li>Coat of Arms: Features three towers, representing the country's fortresses and historical independence.</li>
+        </ul>
+    `;
+    break;
+    case 'Sao Tome and Principe':
+    details.adopted = "November 5, 1975";
+    details.designer = "The Government of São Tomé and Príncipe";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, yellow, and red with two black stars.</li>
+            <li>Green: Represents the country's rich agricultural resources.</li>
+            <li>Yellow: Symbolizes the country's wealth and natural resources.</li>
+            <li>Red: Stands for the struggle for independence.</li>
+            <li>Black Stars: Represent the two islands of São Tomé and Príncipe.</li>
+        </ul>
+    `;
+    break;
+
+case 'Saudi Arabia':
+    details.adopted = "March 15, 1973";
+    details.designer = "The Government of Saudi Arabia";
+    details.description = `
+        <ul>
+            <li>A green field with white Arabic inscription and a sword.</li>
+            <li>Green: Represents Islam and the country’s connection to the faith.</li>
+            <li>Arabic Inscription: The Shahada, declaring "There is no god but Allah, Muhammad is the messenger of Allah."</li>
+            <li>Sword: Represents justice and the strength of the country.</li>
+        </ul>
+    `;
+    break;
+
+case 'Senegal':
+    details.adopted = "August 20, 1960";
+    details.designer = "Lamine Gueye";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of green, yellow, and red with a green star in the center.</li>
+            <li>Green: Represents the country's independence and Islam.</li>
+            <li>Yellow: Symbolizes wealth and the country's agricultural resources.</li>
+            <li>Red: Stands for the struggle for independence.</li>
+            <li>Green Star: Represents unity and the country's guiding principles.</li>
+        </ul>
+    `;
+    break;
+
+case 'Serbia':
+    details.adopted = "November 11, 2010";
+    details.designer = "The Government of Serbia";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, blue, and white with a coat of arms on the hoist side.</li>
+            <li>Red: Represents the courage and blood shed in battles for independence.</li>
+            <li>Blue: Symbolizes the sky, freedom, and the nation's loyalty.</li>
+            <li>White: Represents peace and harmony.</li>
+            <li>Coat of Arms: Features a double-headed eagle, representing unity and sovereignty.</li>
+        </ul>
+    `;
+    break;
+
+case 'Seychelles':
+    details.adopted = "June 18, 1996";
+    details.designer = "The Government of Seychelles";
+    details.description = `
+        <ul>
+            <li>A diagonal tricolor of blue, yellow, red, white, and green.</li>
+            <li>Blue: Represents the sky and the Indian Ocean surrounding the islands.</li>
+            <li>Yellow: Symbolizes the country's sun and hope for the future.</li>
+            <li>Red: Represents the people’s unity and determination.</li>
+            <li>White: Stands for harmony and justice.</li>
+            <li>Green: Symbolizes the country's lush vegetation and natural beauty.</li>
+        </ul>
+    `;
+    break;
+
+case 'Sierra Leone':
+    details.adopted = "April 27, 1961";
+    details.designer = "The Government of Sierra Leone";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, white, and blue.</li>
+            <li>Green: Represents the country's agriculture and natural resources.</li>
+            <li>White: Symbolizes peace, justice, and unity.</li>
+            <li>Blue: Stands for the Atlantic Ocean and the hope for a better future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Singapore':
+    details.adopted = "December 3, 1959";
+    details.designer = "The Government of Singapore";
+    details.description = `
+        <ul>
+            <li>A red field with a white crescent moon and five white stars.</li>
+            <li>Red: Represents universal brotherhood and equality of all people.</li>
+            <li>White Crescent Moon: Symbolizes a young nation on the rise.</li>
+            <li>Five Stars: Represent the nation's ideals of democracy, peace, progress, justice, and equality.</li>
+        </ul>
+    `;
+    break;
+
+case 'Slovakia':
+    details.adopted = "September 3, 1992";
+    details.designer = "The Government of Slovakia";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of white, blue, and red with the national coat of arms.</li>
+            <li>White: Represents peace and generosity.</li>
+            <li>Blue: Symbolizes the sky and freedom.</li>
+            <li>Red: Stands for courage and valor.</li>
+            <li>Coat of Arms: Features a double-cross on a hill, symbolizing the country’s Christian heritage and history.</li>
+        </ul>
+    `;
+    break;
+
+case 'Slovenia':
+    details.adopted = "June 25, 1991";
+    details.designer = "The Government of Slovenia";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of white, blue, and red with the national coat of arms in the upper hoist corner.</li>
+            <li>White: Represents peace and purity.</li>
+            <li>Blue: Symbolizes the sky, the sea, and the country's history.</li>
+            <li>Red: Represents the courage and valor of the Slovenian people.</li>
+            <li>Coat of Arms: Features Mount Triglav, the highest peak in Slovenia, and a pair of waves symbolizing the country’s lakes and rivers.</li>
+        </ul>
+    `;
+    break;
+
+case 'Solomon Islands':
+    details.adopted = "November 18, 1977";
+    details.designer = "The Government of Solomon Islands";
+    details.description = `
+        <ul>
+            <li>A blue field with a yellow diagonal cross and green sections.</li>
+            <li>Blue: Represents the Pacific Ocean surrounding the islands.</li>
+            <li>Yellow: Symbolizes the country's wealth and bright future.</li>
+            <li>Green: Represents the country's fertile land and agriculture.</li>
+        </ul>
+    `;
+    break;
+    case 'Somalia':
+    details.adopted = "October 12, 1954";
+    details.designer = "Mohammad Awale Liban";
+    details.description = `
+        <ul>
+            <li>A blue field with a white star in the center.</li>
+            <li>Blue: Represents the sky, the Indian Ocean, and the country's aspirations.</li>
+            <li>White Star: Symbolizes the five regions of the Somali people: Somalia, Djibouti, Ethiopia, Kenya, and the Somali diaspora.</li>
+        </ul>
+    `;
+    break;
+
+case 'South Africa':
+    details.adopted = "April 27, 1994";
+    details.designer = "Freddy de Vries";
+    details.description = `
+        <ul>
+            <li>A green Y-shape with black, gold, red, blue, and white stripes.</li>
+            <li>Green: Represents the country's growth and development.</li>
+            <li>Black: Symbolizes the country’s black population and the African identity.</li>
+            <li>Gold: Represents the country's wealth, particularly its mineral wealth.</li>
+            <li>Red: Stands for the struggle for freedom.</li>
+            <li>Blue: Represents the sky and the oceans.</li>
+            <li>White: Symbolizes the European population.</li>
+        </ul>
+    `;
+    break;
+
+case 'South Sudan':
+    details.adopted = "July 9, 2011";
+    details.designer = "The Government of South Sudan";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of black, red, and green with a blue triangle containing a yellow star.</li>
+            <li>Black: Represents the people of South Sudan.</li>
+            <li>Red: Symbolizes the bloodshed for independence.</li>
+            <li>Green: Represents the country’s agriculture and natural resources.</li>
+            <li>Blue Triangle: Symbolizes the wealth of the country’s rivers and the struggle for independence.</li>
+            <li>Yellow Star: Represents the country’s aspiration for a bright future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Spain':
+    details.adopted = "December 6, 1981";
+    details.designer = "The Government of Spain";
+    details.description = `
+        <ul>
+            <li>A red and yellow horizontal bicolor with the national coat of arms on the left side.</li>
+            <li>Red: Represents the bravery of the Spanish people.</li>
+            <li>Yellow: Symbolizes the nation’s wealth and resources.</li>
+            <li>Coat of Arms: Features the Pillars of Hercules and other symbols representing Spain's historical regions.</li>
+        </ul>
+    `;
+    break;
+
+case 'Sri Lanka':
+    details.adopted = "May 22, 1972";
+    details.designer = "The Government of Sri Lanka";
+    details.description = `
+        <ul>
+            <li>A golden lion holding a sword on a red background with four orange bo leaves in each corner.</li>
+            <li>Red: Represents the people of Sri Lanka.</li>
+            <li>Gold Lion: Symbolizes the Sinhalese people, their courage, and their strength.</li>
+            <li>Sword: Represents sovereignty.</li>
+            <li>Bo Leaves: Symbolize Buddhism, which is the dominant religion in Sri Lanka.</li>
+        </ul>
+    `;
+    break;
+
+case 'Sudan':
+    details.adopted = "January 1, 1956";
+    details.designer = "The Government of Sudan";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and black with a green triangle on the hoist side.</li>
+            <li>Red: Represents the struggle for independence.</li>
+            <li>White: Symbolizes peace, purity, and the country’s desire for unity.</li>
+            <li>Black: Represents the people of Sudan and the land.</li>
+            <li>Green: Stands for the country’s natural resources and its role in agriculture.</li>
+        </ul>
+    `;
+    break;
+
+case 'Suriname':
+    details.adopted = "November 25, 1975";
+    details.designer = "The Government of Suriname";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, green, and yellow with a star in the center.</li>
+            <li>Red: Represents the country’s determination and strength.</li>
+            <li>White: Symbolizes peace and unity.</li>
+            <li>Green: Stands for the country’s wealth and natural resources.</li>
+            <li>Yellow: Represents the country’s mineral resources.</li>
+            <li>Star: Symbolizes the aspirations of the country’s people.</li>
+        </ul>
+    `;
+    break;
+
+case 'Sweden':
+    details.adopted = "June 6, 1906";
+    details.designer = "Fredrik Meltzer";
+    details.description = `
+        <ul>
+            <li>A blue field with a yellow Scandinavian cross.</li>
+            <li>Blue: Represents loyalty, truth, and the country’s sky and lakes.</li>
+            <li>Yellow: Symbolizes generosity, the country's wealth, and its agricultural resources.</li>
+            <li>Cross: Represents Christianity and the Swedish people’s historical ties to the faith.</li>
+        </ul>
+    `;
+    break;
+
+case 'Switzerland':
+    details.adopted = "December 12, 1889";
+    details.designer = "The Government of Switzerland";
+    details.description = `
+        <ul>
+            <li>A red square with a white cross in the center.</li>
+            <li>Red: Represents the people and the country’s readiness to defend itself.</li>
+            <li>White Cross: Symbolizes the country’s neutrality and its association with Christianity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Syria':
+    details.adopted = "March 30, 1980";
+    details.designer = "The Government of Syria";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, black, with two green stars.</li>
+            <li>Red: Represents the country's struggle for independence and unity.</li>
+            <li>White: Symbolizes peace, love, and cooperation.</li>
+            <li>Black: Stands for the suffering and oppression experienced by the people.</li>
+            <li>Green Stars: Represent the two regions of Syria, Syria and the Lebanese territory.</li>
+        </ul>
+    `;
+    break;
+    case 'Taiwan':
+    details.adopted = "October 25, 1945";
+    details.designer = "The Government of the Republic of China";
+    details.description = `
+        <ul>
+            <li>A red field with a blue canton containing a white sun with twelve rays.</li>
+            <li>Red: Represents the people's passion and the blood of those who fought for the country.</li>
+            <li>Blue: Stands for liberty, democracy, and the sky.</li>
+            <li>White Sun: Symbolizes the spirit of progress and the people’s unity.</li>
+            <li>Twelve Rays: Represent the twelve months of the year and the twelve traditional Chinese virtues.</li>
+        </ul>
+    `;
+    break;
+
+case 'Tajikistan':
+    details.adopted = "November 24, 1992";
+    details.designer = "The Government of Tajikistan";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and green with a golden crown and seven stars.</li>
+            <li>Red: Represents the country's independence and struggle for freedom.</li>
+            <li>White: Symbolizes peace, purity, and the unity of the people.</li>
+            <li>Green: Represents the country's prosperity and its agricultural richness.</li>
+            <li>Crown: Symbolizes the sovereignty of Tajikistan.</li>
+            <li>Seven Stars: Represent the seven regions of the country.</li>
+        </ul>
+    `;
+    break;
+
+case 'Tanzania':
+    details.adopted = "April 30, 1964";
+    details.designer = "The Government of Tanzania";
+    details.description = `
+        <ul>
+            <li>A diagonal bicolor of green and yellow with a black triangle containing a yellow stripe.</li>
+            <li>Green: Represents the country's agriculture and natural resources.</li>
+            <li>Yellow: Stands for the country’s wealth and the people’s hard work.</li>
+            <li>Black: Represents the African people and their unity.</li>
+            <li>Yellow Stripe: Symbolizes the country’s future and prosperity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Thailand':
+    details.adopted = "September 28, 1917";
+    details.designer = "King Rama VI";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and blue with a blue central stripe.</li>
+            <li>Red: Represents the land and the people.</li>
+            <li>White: Symbolizes purity and the country’s Buddhism.</li>
+            <li>Blue: Stands for the monarchy and the loyalty to the king.</li>
+        </ul>
+    `;
+    break;
+
+case 'Togo':
+    details.adopted = "April 27, 1960";
+    details.designer = "The Government of Togo";
+    details.description = `
+        <ul>
+            <li>A green field with five yellow stripes and a white star in the top left corner.</li>
+            <li>Green: Represents the country's fertile lands.</li>
+            <li>Yellow: Symbolizes the country's wealth and the country's struggle for independence.</li>
+            <li>White Star: Stands for the aspiration of the country and its people’s unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Trinidad and Tobago':
+    details.adopted = "August 31, 1962";
+    details.designer = "The Government of Trinidad and Tobago";
+    details.description = `
+        <ul>
+            <li>A red field with a black and white diagonal stripe.</li>
+            <li>Red: Represents the warmth of the people and the vitality of the nation.</li>
+            <li>Black: Symbolizes the strength and determination of the people.</li>
+            <li>White: Represents the country's waters and the purity of the people’s hearts.</li>
+        </ul>
+    `;
+    break;
+
+case 'Tunisia':
+    details.adopted = "July 3, 1959";
+    details.designer = "The Government of Tunisia";
+    details.description = `
+        <ul>
+            <li>A red field with a white circle containing a red crescent and a star.</li>
+            <li>Red: Represents the blood of those who fought for the country’s independence.</li>
+            <li>White: Symbolizes peace, purity, and the country’s values.</li>
+            <li>Crescent: Represents Islam, the predominant religion of Tunisia.</li>
+            <li>Star: Symbolizes the country’s unity and its people’s aspirations.</li>
+        </ul>
+    `;
+    break;
+
+case 'Turkey':
+    details.adopted = "May 29, 1936";
+    details.designer = "Mohammad Ali Velioglu";
+    details.description = `
+        <ul>
+            <li>A red field with a white star and crescent in the center.</li>
+            <li>Red: Represents the country’s bloodshed for independence.</li>
+            <li>White: Symbolizes peace, serenity, and the country’s values.</li>
+            <li>Crescent: Represents the Turkish people's historical connection to Islam.</li>
+            <li>Star: Symbolizes the country's future and its aspiration to shine on the world stage.</li>
+        </ul>
+    `;
+    break;
+
+case 'Turkmenistan':
+    details.adopted = "January 24, 2001";
+    details.designer = "The Government of Turkmenistan";
+    details.description = `
+        <ul>
+            <li>A green field with a red vertical stripe containing symbols of five carpets and a white crescent and five stars.</li>
+            <li>Green: Represents Islam, the country's natural resources, and its fertile land.</li>
+            <li>Red Stripe: Symbolizes the people’s unity and the country’s development.</li>
+            <li>Crescent and Stars: Represent Turkmenistan’s Islamic heritage and aspirations for a bright future.</li>
+        </ul>
+    `;
+    break;
+
+case 'Tuvalu':
+    details.adopted = "October 1, 1978";
+    details.designer = "The Government of Tuvalu";
+    details.description = `
+        <ul>
+            <li>A light blue field with a Union Jack in the top left corner and five stars.</li>
+            <li>Blue: Represents the Pacific Ocean and the country's isolation as an island nation.</li>
+            <li>Union Jack: Represents the historical ties to the United Kingdom.</li>
+            <li>Stars: Represent the islands of Tuvalu.</li>
+        </ul>
+    `;
+    break;
+    case 'Uganda':
+    details.adopted = "October 9, 1962";
+    details.designer = "The Government of Uganda";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of black, yellow, and red with a white circle containing a grey crowned crane.</li>
+            <li>Black: Represents the African people.</li>
+            <li>Yellow: Symbolizes the country's wealth and its future.</li>
+            <li>Red: Stands for the bloodshed during the struggle for independence.</li>
+            <li>Grey Crowned Crane: Symbolizes the national heritage and the country’s abundant wildlife.</li>
+        </ul>
+    `;
+    break;
+
+case 'Ukraine':
+    details.adopted = "January 28, 1992";
+    details.designer = "The Government of Ukraine";
+    details.description = `
+        <ul>
+            <li>A horizontal bicolor of blue and yellow.</li>
+            <li>Blue: Represents the sky and the country’s natural beauty.</li>
+            <li>Yellow: Symbolizes the country’s fields of wheat and the nation’s agricultural wealth.</li>
+        </ul>
+    `;
+    break;
+
+case 'United Arab Emirates':
+    details.adopted = "December 2, 1971";
+    details.designer = "Abdulla Mohammed Al Maainah";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of green, white, black, and red with a vertical red stripe.</li>
+            <li>Green: Represents fertility, prosperity, and the country’s growth.</li>
+            <li>White: Symbolizes peace, honesty, and the nation's bright future.</li>
+            <li>Black: Stands for the country's strength, determination, and oil wealth.</li>
+            <li>Red: Represents courage, unity, and the sacrifices made for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'United Kingdom':
+    details.adopted = "January 1, 1801";
+    details.designer = "The Government of the United Kingdom";
+    details.description = `
+        <ul>
+            <li>A blue field with a red and white cross and a white saltire.</li>
+            <li>Blue: Represents the country’s loyalty and its association with the sea.</li>
+            <li>Red Cross: Symbolizes England, St. George’s Cross.</li>
+            <li>White Saltire: Represents Scotland, St. Andrew’s Cross.</li>
+            <li>Red Saltire: Represents Ireland, St. Patrick’s Cross.</li>
+        </ul>
+    `;
+    break;
+
+case 'Uruguay':
+    details.adopted = "August 11, 1830";
+    details.designer = "Juan Antonio Lavalleja";
+    details.description = `
+        <ul>
+            <li>A light blue field with nine horizontal stripes and a white square with a golden sun.</li>
+            <li>Blue Stripes: Represent the nine departments of Uruguay at the time of its independence.</li>
+            <li>White Square: Represents peace.</li>
+            <li>Golden Sun: Symbolizes freedom and the nation’s aspiration to shine.</li>
+        </ul>
+    `;
+    break;
+
+case 'Uzbekistan':
+    details.adopted = "November 18, 1991";
+    details.designer = "The Government of Uzbekistan";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, white, and green with a red stripe in between, and a crescent and stars in the upper left corner.</li>
+            <li>Blue: Represents the sky and water, crucial for the country's agricultural economy.</li>
+            <li>White: Symbolizes peace, purity, and the country’s commitment to development.</li>
+            <li>Green: Represents fertility and the country’s agriculture.</li>
+            <li>Red: Symbolizes the nation’s historical past and its future.</li>
+            <li>Crescent and Stars: Represent the country’s Islamic heritage.</li>
+        </ul>
+    `;
+    break;
+
+case 'Vanuatu':
+    details.adopted = "February 18, 1980";
+    details.designer = "The Government of Vanuatu";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, yellow, and green with a black Y-shape and a yellow emblem.</li>
+            <li>Red: Represents the people of Vanuatu and their strength.</li>
+            <li>Yellow: Symbolizes the country’s independence and freedom.</li>
+            <li>Green: Represents the country's fertile land and agriculture.</li>
+            <li>Black Y-Shape: Stands for the unity of the islands.</li>
+            <li>Yellow Emblem: Represents the country’s history, culture, and traditional knowledge.</li>
+        </ul>
+    `;
+    break;
+
+case 'Venezuela':
+    details.adopted = "March 12, 2006";
+    details.designer = "The Government of Venezuela";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of yellow, blue, and red with eight white stars arranged in an arc.</li>
+            <li>Yellow: Represents the country's wealth and its resources.</li>
+            <li>Blue: Symbolizes the independence of Venezuela.</li>
+            <li>Red: Stands for the bloodshed in the struggle for freedom.</li>
+            <li>Eight Stars: Represent the eight provinces that participated in the country’s independence movement.</li>
+        </ul>
+    `;
+    break;
+
+case 'Vietnam':
+    details.adopted = "November 30, 1955";
+    details.designer = "The Government of Vietnam";
+    details.description = `
+        <ul>
+            <li>A red field with a yellow star in the center.</li>
+            <li>Red: Represents the revolution and the blood shed for independence.</li>
+            <li>Yellow Star: Symbolizes the unity of the workers, peasants, intellectuals, soldiers, and youth.</li>
+        </ul>
+    `;
+    break;
+
+case 'Yemen':
+    details.adopted = "May 22, 1990";
+    details.designer = "The Government of Yemen";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, white, and black.</li>
+            <li>Red: Represents the struggle for independence and freedom.</li>
+            <li>White: Symbolizes the future of Yemen and the desire for peace.</li>
+            <li>Black: Stands for the dark past, from which the country has emerged.</li>
+        </ul>
+    `;
+    break;
+    case 'Zambia':
+    details.adopted = "October 24, 1964";
+    details.designer = "The Government of Zambia";
+    details.description = `
+        <ul>
+            <li>A green field with an orange eagle and three vertical stripes of red, black, and orange.</li>
+            <li>Green: Represents the country's natural resources and agriculture.</li>
+            <li>Orange Eagle: Symbolizes the nation's freedom and the country's ability to soar to greater heights.</li>
+            <li>Red: Represents the struggle for independence.</li>
+            <li>Black: Symbolizes the people of Zambia.</li>
+            <li>Orange: Represents the country's mineral wealth.</li>
+        </ul>
+    `;
+    break;
+
+case 'Zimbabwe':
+    details.adopted = "April 18, 1980";
+    details.designer = "The Government of Zimbabwe";
+    details.description = `
+        <ul>
+            <li>A green, yellow, and red horizontal tricolor with a white triangle containing a red star and a bird.</li>
+            <li>Green: Represents the country’s agriculture and its natural resources.</li>
+            <li>Yellow: Symbolizes the country’s mineral wealth.</li>
+            <li>Red: Stands for the blood shed for independence.</li>
+            <li>White Triangle: Symbolizes peace and the country's desire to move forward.</li>
+            <li>Red Star: Represents the country’s socialist leanings and independence.</li>
+            <li>Bird: Represents freedom.</li>
+        </ul>
+    `;
+    break;
+    case 'Cape Verde':
+    details.adopted = "September 22, 1992";
+    details.designer = "The Government of Cape Verde";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of blue, white, and red, with a circle of ten yellow stars in the center.</li>
+            <li>Blue: Represents the sky, the ocean, and the country’s desire for progress.</li>
+            <li>White: Symbolizes peace and unity.</li>
+            <li>Red: Stands for the struggle for freedom and independence.</li>
+            <li>Yellow Stars: Represent the country's ten islands, which are a part of the nation.</li>
+        </ul>
+    `;
+    break;
+
+case 'Czechia':
+    details.adopted = "January 1, 1993";
+    details.designer = "The Government of Czechia";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of white, red, and blue with a blue triangle extending from the left side.</li>
+            <li>White: Represents peacefulness and honesty.</li>
+            <li>Red: Symbolizes courage and valor.</li>
+            <li>Blue: Stands for vigilance, truth, and loyalty.</li>
+            <li>Triangle: Represents the historical connection with Slovakia.</li>
+        </ul>
+    `;
+    break;
+
+case 'DR Congo':
+    details.adopted = "February 20, 2006";
+    details.designer = "The Government of the Democratic Republic of the Congo";
+    details.description = `
+        <ul>
+            <li>A blue field with a yellow star and a red diagonal stripe.</li>
+            <li>Blue: Represents peace and the country's aspirations for progress.</li>
+            <li>Yellow Star: Symbolizes the country’s bright future and the people’s hope.</li>
+            <li>Red Stripe: Stands for the blood shed for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Ivory Coast':
+    details.adopted = "November 3, 1959";
+    details.designer = "The Government of Ivory Coast";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of orange, white, and green.</li>
+            <li>Orange: Represents the country's land and its people.</li>
+            <li>White: Symbolizes peace and unity.</li>
+            <li>Green: Stands for the country’s forests and agricultural resources.</li>
+        </ul>
+    `;
+    break;
+
+case 'Libya':
+    details.adopted = "November 11, 2011";
+    details.designer = "The Government of Libya";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of red, black, and green, with a white crescent and star in the center.</li>
+            <li>Red: Represents the blood of those who died for the country’s freedom.</li>
+            <li>Black: Symbolizes the dark history of the country under colonial rule.</li>
+            <li>Green: Represents the country’s agriculture and its hope for a bright future.</li>
+            <li>Crescent and Star: Symbolize Islam, which is the religion of most Libyans.</li>
+        </ul>
+    `;
+    break;
+
+case 'Maldives':
+    details.adopted = "November 11, 1965";
+    details.designer = "The Government of Maldives";
+    details.description = `
+        <ul>
+            <li>A red field with a green rectangle in the center and a white crescent moon.</li>
+            <li>Red: Represents the country's determination and unity.</li>
+            <li>Green: Symbolizes peace, prosperity, and the country’s land.</li>
+            <li>Crescent Moon: Represents Islam, the country’s main religion.</li>
+        </ul>
+    `;
+    break;
+
+case 'Mali':
+    details.adopted = "March 1, 1961";
+    details.designer = "The Government of Mali";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of green, yellow, and red.</li>
+            <li>Green: Represents hope and the country’s agricultural wealth.</li>
+            <li>Yellow: Symbolizes the country’s wealth, particularly from its mineral resources.</li>
+            <li>Red: Stands for the blood shed during the struggle for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'Myanmar':
+    details.adopted = "November 21, 2010";
+    details.designer = "The Government of Myanmar";
+    details.description = `
+        <ul>
+            <li>A horizontal tricolor of yellow, green, and red with a white star in the center.</li>
+            <li>Yellow: Represents the country’s unity and its commitment to peace.</li>
+            <li>Green: Symbolizes agriculture, forests, and the natural wealth of the country.</li>
+            <li>Red: Stands for courage, strength, and the struggle for independence.</li>
+            <li>White Star: Represents the nation’s unity and the determination of the people.</li>
+        </ul>
+    `;
+    break;
+
+case 'North Macedonia':
+    details.adopted = "October 5, 1995";
+    details.designer = "The Government of North Macedonia";
+    details.description = `
+        <ul>
+            <li>A red field with a yellow sun with eight rays in the center.</li>
+            <li>Red: Represents the country's strength and its struggle for independence.</li>
+            <li>Yellow Sun: Symbolizes the country's bright future and its centuries-old culture.</li>
+            <li>Eight Rays: Represent the country's cultural and historical unity.</li>
+        </ul>
+    `;
+    break;
+
+case 'Republic of the Congo':
+    details.adopted = "August 15, 1991";
+    details.designer = "The Government of the Republic of the Congo";
+    details.description = `
+        <ul>
+            <li>A diagonal tricolor of green, yellow, and red.</li>
+            <li>Green: Represents the country's natural resources and agriculture.</li>
+            <li>Yellow: Symbolizes the wealth and prosperity of the country.</li>
+            <li>Red: Stands for the sacrifices made during the struggle for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'São Tomé and Príncipe':
+    details.adopted = "November 5, 1975";
+    details.designer = "The Government of São Tomé and Príncipe";
+    details.description = `
+        <ul>
+            <li>A green field with two black stars and a yellow triangle on the left side.</li>
+            <li>Green: Represents the country’s forests and natural wealth.</li>
+            <li>Yellow: Symbolizes the country's wealth, particularly from agriculture.</li>
+            <li>Black Stars: Represent the two islands, São Tomé and Príncipe.</li>
+            <li>Red Triangle: Stands for the country’s struggle for independence.</li>
+        </ul>
+    `;
+    break;
+
+case 'South Korea':
+    details.adopted = "August 15, 1948";
+    details.designer = "The Government of South Korea";
+    details.description = `
+        <ul>
+            <li>A white field with a red and blue yin-yang symbol in the center, surrounded by four black trigrams.</li>
+            <li>White: Represents peace and purity.</li>
+            <li>Red and Blue: Symbolize the balance of the forces of nature, as represented by the yin and yang concept.</li>
+            <li>Black Trigrams: Represent heaven, earth, fire, and water.</li>
+        </ul>
+    `;
+    break;
+
+case 'Timor-Leste':
+    details.adopted = "May 20, 2002";
+    details.designer = "The Government of Timor-Leste";
+    details.description = `
+        <ul>
+            <li>A red field with a yellow triangle and a black isosceles triangle.</li>
+            <li>Red: Represents the country’s struggle for independence and the blood of its martyrs.</li>
+            <li>Yellow Triangle: Symbolizes the country's resources and development.</li>
+            <li>Black Triangle: Stands for the country’s resilience and strength.</li>
+        </ul>
+    `;
+    break;
+
+case 'United States':
+    details.adopted = "July 4, 1776";
+    details.designer = "The United States of America";
+    details.description = `
+        <ul>
+            <li>A red, white, and blue field with 13 stripes and 50 white stars.</li>
+            <li>Red Stripes: Represent the 13 original colonies.</li>
+            <li>White Stripes: Symbolize purity and innocence.</li>
+            <li>Blue: Represents vigilance, perseverance, and justice.</li>
+            <li>50 Stars: Represent the 50 states of the United States.</li>
+        </ul>
+    `;
+    break;
+
+case 'Vatican City':
+    details.adopted = "June 7, 1929";
+    details.designer = "The Government of Vatican City";
+    details.description = `
+        <ul>
+            <li>A vertical tricolor of yellow and white with the Vatican coat of arms in the center.</li>
+            <li>Yellow: Represents the Pope and the Catholic Church.</li>
+            <li>White: Symbolizes the Holy See and the purity of the Church.</li>
+            <li>Coat of Arms: Features two crossed keys and the Papal Tiara.</li>
+        </ul>
+    `;
+    break;
+
+                default:
+                    details.description = "Symbolism for this flag is not available.";
+                    break;
+            }
+
+            return details;
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase(); // Convert search term to lowercase
+    document.querySelectorAll('.country-card').forEach(card => {
+        const countryName = card.querySelector('.country-name').textContent.toLowerCase(); // Convert country name to lowercase
+        card.style.display = countryName.includes(searchTerm) ? 'block' : 'none';
+    });
+});
+    
+        fetchCountries();
+    </script>
+</body>
+</html>
